@@ -65,7 +65,6 @@ func main() {
 	if err != nil {
 		log.Error("Error in server.ListenAndServe()", "error", err)
 	}
-
 }
 
 // Hypermedia API
@@ -88,13 +87,13 @@ func logging(f http.Handler) http.HandlerFunc {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		id := uuid.New().String()
 
-		log = log.With("request_id", id)
-		log.Info("method", r.Method,
-			"time", time.Now, "url",
-			r.URL.Path, "address",
-			r.RemoteAddr)
+		request_log := log.With("request_id", id)
+		request_log.Info("REQUEST",
+			"method", r.Method,
+			"url", r.URL.Path,
+			"address", r.RemoteAddr)
 
-		ctx := context.WithValue(r.Context(), "logs", log)
+		ctx := context.WithValue(r.Context(), "logs", request_log)
 		r = r.WithContext(ctx)
 
 		f.ServeHTTP(w, r)
