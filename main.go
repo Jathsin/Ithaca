@@ -19,6 +19,7 @@ type App struct {
 }
 
 // Templates utils
+
 type Templates struct {
 	templates *template.Template
 }
@@ -27,6 +28,7 @@ func (t *Templates) Render(w io.Writer, name string, data interface{}) error {
 	return t.templates.ExecuteTemplate(w, name, data)
 }
 
+// Add functionalities
 func newTemplate() *Templates {
 	tmpl := template.New("layout").Funcs(template.FuncMap{
 		"add": func(a, b int) int {
@@ -53,8 +55,11 @@ func main() {
 
 	// Hypermedia API
 
+	mux.Handle("GET /static/", http.StripPrefix("/static/", http.FileServer(http.Dir("./static"))))
+
 	mux.HandleFunc("GET /", app.landing_handler)
 
+	// Build server
 	server := http.Server{
 		Addr:         ":8080",
 		ReadTimeout:  30 * time.Second,
