@@ -3,7 +3,7 @@ package landing
 import (
 	"jathsin/types"
 	"jathsin/utils"
-	"jathsin/web/ui"
+	ui "jathsin/web/shared"
 
 	"net/http"
 

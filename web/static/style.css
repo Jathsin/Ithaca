@@ -20,6 +20,7 @@
   --text_1: #202373ff;
   --text_2: rgb(101, 65, 7);
   --logo: rgb(175, 152, 113);
+  --code-block: #2e3440;
 }
 
 /* Typography: About / Articles */
@@ -134,6 +135,20 @@ section a:hover {
   overflow: hidden;
   max-height: 0;
   transition: max-height 700ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.code-block pre {
+  overflow-x: auto;
+  max-width: 100%;
+  padding: 1rem;
+
+  border-bottom-left-radius: 0.7rem;
+  border-bottom-right-radius: 0.7rem;
+  background: #2e3440;
+}
+.code-block {
+  width: 100%;
+  max-width: 100%;
 }
 
 /* ==============================

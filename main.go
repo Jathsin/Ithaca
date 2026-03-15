@@ -1,11 +1,12 @@
 package main
 
 import (
-	"jathsin/landing"
 	"jathsin/logger"
 	"jathsin/web/about"
 	"jathsin/web/articles"
+	"jathsin/web/landing"
 	"jathsin/web/projects"
+
 	"net/http"
 	"os"
 	"time"
@@ -63,7 +64,7 @@ func main() {
 
 	mux.Handle("GET /articles", articles_mux)
 
-	mux.Handle("GET /static/", http.StripPrefix("/static/", http.FileServer(http.Dir("static"))))
+	mux.Handle("GET /web/static/", http.StripPrefix("/web/static/", http.FileServer(http.Dir("web/static"))))
 
 	// Build server
 	server := http.Server{

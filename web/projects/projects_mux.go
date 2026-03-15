@@ -4,7 +4,7 @@ import (
 	"jathsin/posts"
 	"jathsin/types"
 	"jathsin/utils"
-	"jathsin/web/ui"
+	ui "jathsin/web/shared"
 	"log/slog"
 
 	"net/http"
@@ -91,6 +91,10 @@ func show_project_handler(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "Internal Server Error", http.StatusInternalServerError)
 		log.Error("show_project_handler: error in posts.Get_md_from_slug(slug, \"projects\")", "err", err)
 	}
-	// TODO: get specific metadata for project
+
+	if utils.IsHTMX(r) {
+		templ.Handler(project(content)).ServeHTTP(w, r)
+		return
+	}
 	templ.Handler(ui.Layout(nil, ui.Nav_bar(), project(content), seo.SEO)).ServeHTTP(w, r)
 }

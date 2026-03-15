@@ -41,7 +41,7 @@ func Layout(canvas templ.Component, nav_bar templ.Component, content templ.Compo
 		var templ_7745c5c3_Var2 string
 		templ_7745c5c3_Var2, templ_7745c5c3_Err = templ.JoinStringErrs(seo.Meta_description)
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/ui/templates.templ`, Line: 15, Col: 58}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/shared/templates.templ`, Line: 15, Col: 58}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var2))
 		if templ_7745c5c3_Err != nil {
@@ -54,7 +54,7 @@ func Layout(canvas templ.Component, nav_bar templ.Component, content templ.Compo
 		var templ_7745c5c3_Var3 string
 		templ_7745c5c3_Var3, templ_7745c5c3_Err = templ.JoinStringErrs(seo.Meta_property_title)
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/ui/templates.templ`, Line: 16, Col: 62}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/shared/templates.templ`, Line: 16, Col: 62}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var3))
 		if templ_7745c5c3_Err != nil {
@@ -67,7 +67,7 @@ func Layout(canvas templ.Component, nav_bar templ.Component, content templ.Compo
 		var templ_7745c5c3_Var4 string
 		templ_7745c5c3_Var4, templ_7745c5c3_Err = templ.JoinStringErrs(seo.Meta_property_description)
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/ui/templates.templ`, Line: 17, Col: 74}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/shared/templates.templ`, Line: 17, Col: 74}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var4))
 		if templ_7745c5c3_Err != nil {
@@ -80,7 +80,7 @@ func Layout(canvas templ.Component, nav_bar templ.Component, content templ.Compo
 		var templ_7745c5c3_Var5 string
 		templ_7745c5c3_Var5, templ_7745c5c3_Err = templ.JoinStringErrs(seo.Meta_Og_URL)
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/ui/templates.templ`, Line: 18, Col: 52}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/shared/templates.templ`, Line: 18, Col: 52}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var5))
 		if templ_7745c5c3_Err != nil {
@@ -94,7 +94,7 @@ func Layout(canvas templ.Component, nav_bar templ.Component, content templ.Compo
 			var templ_7745c5c3_Var6 string
 			templ_7745c5c3_Var6, templ_7745c5c3_Err = templ.JoinStringErrs(seo.Title)
 			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/ui/templates.templ`, Line: 21, Col: 16}
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/shared/templates.templ`, Line: 21, Col: 16}
 			}
 			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var6))
 			if templ_7745c5c3_Err != nil {
@@ -110,7 +110,7 @@ func Layout(canvas templ.Component, nav_bar templ.Component, content templ.Compo
 				return templ_7745c5c3_Err
 			}
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 8, "</title><!-- favicon --><link rel=\"icon\" type=\"image/svg+xml\" href=\"/static/images/logo.svg\"><!-- static files --><link rel=\"stylesheet\" href=\"/static/style.css\"><!-- htmx --><script src=\"/static/scripts/htmx.js\"></script><!-- tailwind --><script src=\"https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4\"></script><!-- fonts --><link rel=\"preconnect\" href=\"https://fonts.googleapis.com\"><link rel=\"preconnect\" href=\"https://fonts.gstatic.com\" crossorigin><link href=\"https://fonts.googleapis.com/css2?family=Jersey+10&family=Libre+Baskerville:ital,wght@0,400..700;1,400..700&display=swap\" rel=\"stylesheet\"><script defer src=\"/static/scripts/perlin.js\"></script><script defer src=\"/static/scripts/logic.js\"></script></head><body class=\"relative bg-[var(--primary)] flex flex-col\">")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 8, "</title><!-- favicon --><link rel=\"icon\" type=\"image/svg+xml\" href=\"/web/static/images/logo.svg\"><!-- static files --><link rel=\"stylesheet\" href=\"/web/static/style.css\"><!-- htmx --><script src=\"/web/static/scripts/htmx.js\"></script><!-- tailwind --><script src=\"https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4\"></script><!-- syntac highlight for pieces of embedded code --><link rel=\"stylesheet\" href=\"https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/styles/default.min.css\"><script src=\"https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/highlight.min.js\"></script><!-- fonts --><link rel=\"preconnect\" href=\"https://fonts.googleapis.com\"><link rel=\"preconnect\" href=\"https://fonts.gstatic.com\" crossorigin><link href=\"https://fonts.googleapis.com/css2?family=Jersey+10&family=Libre+Baskerville:ital,wght@0,400..700;1,400..700&display=swap\" rel=\"stylesheet\"><script defer src=\"/web/static/scripts/perlin.js\"></script><script defer src=\"/web/static/scripts/logic.js\"></script><script defer src=\"/web/static/scripts/components.js\"></script></head><body class=\"relative bg-[var(--primary)] flex flex-col\">")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}

@@ -48,20 +48,20 @@ func projects(projects_list []Project) templ.Component {
 				return templ_7745c5c3_Err
 			}
 			for _, project := range projects_list {
-				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 3, "<a href=\"")
+				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 3, "<a hx-get=\"")
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
-				var templ_7745c5c3_Var2 templ.SafeURL
-				templ_7745c5c3_Var2, templ_7745c5c3_Err = templ.JoinURLErrs(templ.URL("/projects/" + project.Name))
+				var templ_7745c5c3_Var2 string
+				templ_7745c5c3_Var2, templ_7745c5c3_Err = templ.JoinStringErrs(templ.URL("/projects/" + project.Name))
 				if templ_7745c5c3_Err != nil {
-					return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/projects/templates.templ`, Line: 27, Col: 50}
+					return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/projects/templates.templ`, Line: 27, Col: 52}
 				}
 				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var2))
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
-				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 4, "\" hx-disable hx-boost=\"false\" class=\" w-full max-h-[500px] \n\t\t\t\t\t\t\tflex flex-col p-4\n\t\t\t\t\t\t\taspect-square bg-[var(--logo)]/10 rounded-[25px]\n\t\t\t\t\t\t\tcursor-pointer\"><div id=\"bento-header\"><div id=\"bento-title\">")
+				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 4, "\" hx-target=\"#main\" hx-swap=\"innerHTML swap:100ms settle:100ms\" class=\" w-full max-h-[500px] \n\t\t\t\t\t\t\tflex flex-col p-4\n\t\t\t\t\t\t\taspect-square bg-[var(--logo)]/10 rounded-[25px]\n\t\t\t\t\t\t\tcursor-pointer\"><div id=\"bento-header\"><div id=\"bento-title\">")
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
@@ -123,7 +123,7 @@ func project(content templ.Component) templ.Component {
 			templ_7745c5c3_Var5 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 8, "<section class=\"mx-auto pt-20 pb-30 max-w-[80%] md:max-w-[50%] font-['Libre_Baskerville'] text-[13px]\">")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 8, "<section class=\"mx-auto pt-20 pb-30 max-w-[70%] md:max-w-[50%] font-['Libre_Baskerville'] text-[13px]\">")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}

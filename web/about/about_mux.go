@@ -3,7 +3,7 @@ package about
 import (
 	"jathsin/types"
 	"jathsin/utils"
-	"jathsin/web/ui"
+	ui "jathsin/web/shared"
 	"net/http"
 
 	"github.com/a-h/templ"

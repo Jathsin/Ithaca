@@ -24,9 +24,9 @@ templ projects(projects_list []Project) {
 		>
 			for _, project := range projects_list {
 				<a
-					href={ templ.URL("/projects/" + project.Name) }
-					hx-disable
-					hx-boost="false"
+					hx-get={ templ.URL("/projects/" + project.Name) }
+					hx-target="#main"
+					hx-swap="innerHTML swap:100ms settle:100ms"
 					class=" w-full max-h-[500px] 
 							flex flex-col p-4
 							aspect-square bg-[var(--logo)]/10 rounded-[25px]
@@ -44,7 +44,7 @@ templ projects(projects_list []Project) {
 
 // TODO: think how to pass content formatted with Goldmark
 templ project(content templ.Component) {
-	<section class="mx-auto pt-20 pb-30 max-w-[80%] md:max-w-[50%] font-['Libre_Baskerville'] text-[13px]">
+	<section class="mx-auto pt-20 pb-30 max-w-[70%] md:max-w-[50%] font-['Libre_Baskerville'] text-[13px]">
 		@content
 	</section>
 }
