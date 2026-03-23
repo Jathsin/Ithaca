@@ -38,9 +38,7 @@ templ Layout(canvas templ.Component, nav_bar templ.Component, content templ.Comp
 			<link rel="preconnect" href="https://fonts.googleapis.com"/>
 			<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
 			<link href="https://fonts.googleapis.com/css2?family=Jersey+10&family=Libre+Baskerville:ital,wght@0,400..700;1,400..700&display=swap" rel="stylesheet"/>
-			// landing 
-			<script defer src="/web/static/scripts/perlin.js"></script>
-			<script defer src="/web/static/scripts/logic.js"></script>
+			<!--  my components -->
 			<script defer src="/web/static/scripts/components.js"></script>
 		</head>
 		<body class="relative bg-[var(--primary)] flex flex-col">
@@ -69,7 +67,7 @@ templ Nav_bar() {
 		hx-swap="innerHTML swap:100ms settle:100ms"
 		hx-push-url="true"
 		class="	fixed top-5 left-5 lg:left-6 z-40
-					text-[var(--logo)] hover:text-[var(--text_2)] transition-colors duration-80 ease-in cursor-pointer"
+				text-[var(--logo)] hover:text-[var(--text_2)] transition-colors duration-80 ease-in cursor-pointer"
 	>
 		<svg class="w-7 lg:w-8 h-auto" viewBox="0 0 791 927" fill="var(--primary)" xmlns="http://www.w3.org/2000/svg">
 			<path d="M259.608 71.5029C276.84 65.6359 365.498 62.5029 380.108 119.003C387.608 148.003 385.265 202.211 352.108 244.503C303.108 307.003 249.108 293.503 221.608 280.503C203.108 271.757 154.553 245.398 157.66 174.117C160.766 102.837 229.464 72.4002 259.608 71.5029Z" stroke="currentColor" stroke-width="95"></path>

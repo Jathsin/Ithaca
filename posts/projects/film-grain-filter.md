@@ -16,11 +16,11 @@ seo_meta_og_url: "https://grafiquer.com/projects/film-grain-filter"
 
 1. 20 year old me had been listening to Them&I for a while (if you like downtempo/chill electronic vibes you should give it a try) and realised how aesthetic and vintage the front pages of his songs were. Soon, driven by my obession with old cameras and willing to replicate that effect in my pictures, I left vanilla java script for the first time and dove head first into: **WebGL 1.0**.
 
-<!-- <div class="w-full h-[800px] py-5">
+<div class="w-full h-[550px] md:h-[700px] py-5">
     <iframe class="block w-full h-full border-0"
         src="/projects/film-grain-filter/canvas.html"
     ></iframe>
-</div> -->
+</div>
 
 ## Brief intro to WebGL
 
@@ -59,7 +59,7 @@ GPU execution
 
 ## How the shader works
 
-6. The API is already built on the browser, so no need to download or embed a library. Actually, you could paste this code into Greggman´s <https://jsfiddle.net/greggman/8djzyjL3/> and play with it by yourself. In the following, how to develop a noise filter shader in a nutshell:
+6. The API is already built on the browser, so no need to download or embed a library. Actually, you could paste this code into ,<a href="https://jsfiddle.net/greggman/8djzyjL3/">Greggman´s </a> and play with it by yourself. In the following, how to develop a noise filter shader in a nutshell:
 
 7. First, you need a html canvas to start talking in WebGL.
 
@@ -95,8 +95,15 @@ It is fine if you don´t understand the syntax, variable declaration, data types
 
 ### How to load an image using WebGL
 
-```javascript
+### The real magic: Noise
 
+8. What this script is doing is basically changing how we reference coordinates
+   and telling where to render a vertex by asigning the coordinates of our texture
+   to gl_Position.
+
+<div class="code-block bg-[var(--code-block)] rounded-[0.7rem]">
+
+```javascript
 <script id="vertex_shader" type="x-shader/x-vertex">
   // Which part of the image goes on which part of the triangle?
   // That is why we define texCoord attribute
@@ -119,14 +126,11 @@ It is fine if you don´t understand the syntax, variable declaration, data types
 </script>
 ```
 
-### The real magic: Noise
+</div>
 
-8. What this script is doing is basically changing how we reference coordinates
-   and telling where to render a vertex by asigning the coordinates of our texture
-   to gl_Position.
+<div class="code-block bg-[var(--code-block)] rounded-[0.7rem]">
 
-   <!-- ```javascript
-
+```javascript
    <script id="fragment_shader" type="x-shader/x-fragment">
      precision highp float;
 
@@ -158,13 +162,16 @@ It is fine if you don´t understand the syntax, variable declaration, data types
          gl_FragColor = mix(color, grain_val, blend_val);
 
      }
+
    </script>
-   ``` -->
+```
+
+</div>
 
 - Vertex shader
 - Fragment shader (what is fragment)
 
-9. Check the full js code here <https://github.com/Jathsin/grafiquer/blob/main/projects/film-grain-filter/static/filter.js>
+9. Check the full js code <a href="https://github.com/Jathsin/grafiquer/tree/main/projects/film-grain-filter">here</a>.
 
 - GPU as a state machine (buffers, etc.)
   example with buffer
@@ -177,7 +184,7 @@ It is fine if you don´t understand the syntax, variable declaration, data types
 
 4. I just discovered — GPT told me — that there are programs that talk directly to the GPU, whereas JavaScript normally talks to the CPU. These programs accelerate the rendering of pixels on screen. One of them is **WebGL**, which I intend to learn over time.
 
-   Check this resource: <https://webglfundamentals.org/>
+   Check this resource: https://webglfundamentals.org/
 
    Things to review:
    - GPU as a state machine (buffers, etc.)
@@ -185,7 +192,7 @@ It is fine if you don´t understand the syntax, variable declaration, data types
    - The rendering pipeline
 
 5. Film grain reference:
-   <https://maximmcnair.com/p/webgl-film-grain>
+   https://maximmcnair.com/p/webgl-film-grain
 
 ## Applications
 
@@ -199,4 +206,4 @@ https://bruno-simon.com/
 https://glslsandbox.com/
 https://observablehq.com/@observable81?tab=recents
 
-<https://maximmcnair.com/p/webgl-film-grain>
+https://maximmcnair.com/p/webgl-film-grain

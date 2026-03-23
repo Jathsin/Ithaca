@@ -1,0 +1,120 @@
+<head>
+  <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+  <link rel="stylesheet" href="/web/static/style.css" />
+</head>
+<div
+  class="flex flex-col justify-center items-center gap-y-5 lg:items-start md:gap-x-2 md:flex-row"
+>
+  <div class="flex flex-col lg:justify-center items-center lg:gap-y-20 pt-2">
+    <div
+      class="w-full flex flex-row gap-x-5 justify-start items-center lg:justify-center lg:flex-col gap-y-2"
+    >
+      <label class="label leading-none self-center" for="slider-density"
+        >Density</label
+      >
+      <div class="w-full flex flex-col items-end">
+        <input
+          id="slider-density"
+          type="range"
+          min="0"
+          max="1"
+          step="0.01"
+          value="0.5"
+          class="slider"
+        />
+      </div>
+    </div>
+    <div
+      class="w-full flex flex-row gap-x-5 justify-start items-center lg:justify-center lg:flex-col gap-y-2"
+    >
+      <label class="label leading-none self-center" for="slider-grainsize"
+        >Size</label
+      >
+      <div class="w-full flex flex-col items-end">
+        <input
+          id="slider-grainsize"
+          type="range"
+          min="0.25"
+          max="2"
+          step="0.01"
+          value="0.5"
+          class="slider"
+        />
+      </div>
+    </div>
+  </div>
+  <div class="flex flex-col justify-center items-center w-fit gap-y-2">
+    <canvas id="canvas" class="block w-full aspect-square h-auto"></canvas>
+    <div class="flex flex-row justify-center gap-x-2">
+      <img
+        id="gustavo"
+        class="h-16 w-16 rounded object-cover cursor-pointer"
+        src="/projects/film-grain-filter/static/images/gustavo.jpg"
+      />
+      <img
+        id="cat"
+        class="h-16 w-16 rounded object-cover cursor-pointer"
+        src="/projects/film-grain-filter/static/images/cat.jpg"
+      />
+    </div>
+  </div>
+</div>
+<script id="vertex_shader" type="x-shader/x-vertex">
+  // Which part of the image goes on which part of the triangle?
+  // That is why we define texCoord attribute
+  attribute vec2 a_position;
+  attribute vec2 a_tex_coord;
+  uniform vec2 u_resolution;
+  varying vec2 v_tex_coord;
+
+  void main() {
+     // convert coordinates to clip-space
+     vec2 zero_to_one = a_position / u_resolution;
+     vec2 zero_to_two = zero_to_one * 2.0;
+     vec2 clip_space = zero_to_two - 1.0;
+     gl_Position = vec4(clip_space*vec2(1,-1), 0, 1); // flip y-axis
+
+     // pass the texCoord to the fragment shader
+     // The GPU will interpolate this value between points.
+     v_tex_coord = a_tex_coord;
+  }
+</script>
+<script id="fragment_shader" type="x-shader/x-fragment">
+  precision highp float;
+
+  uniform sampler2D u_image;
+  uniform vec2 u_resolution;
+  varying vec2 v_tex_coord;
+  uniform float blend_val;
+  uniform float grainsize;
+
+  float rand(vec2 co){
+    return fract(sin(dot(co, vec2(12.9898, 78.233))) * 43758.5453);
+  }
+
+  // Brightness
+  vec4 grain(vec4 fragColor){
+    vec4 color = fragColor;
+
+    vec2 cell = floor(gl_FragCoord.xy / grainsize);
+    float diff = rand(cell) - 0.5;
+
+    color.rgb += diff;
+    return color;
+  }
+
+  void main() {
+      vec2 uv = gl_FragCoord.xy / u_resolution;
+      vec4 color = texture2D(u_image, v_tex_coord);
+      vec4 grain_val = grain(color);
+      gl_FragColor = mix(color, grain_val, blend_val);
+
+  }
+</script>
+
+<script src="https://greggman.github.io/webgl-lint/webgl-lint.js"></script>
+<script src="https://webglfundamentals.org/webgl/resources/webgl-utils.js"></script>
+<script
+  type="module"
+  src="/projects/film-grain-filter/static/filter.js"
+></script>

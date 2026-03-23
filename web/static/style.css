@@ -114,9 +114,12 @@ section a:hover {
   will-change: opacity;
 }
 
-#main.page-fade.htmx-swapping,
-#main.page-fade.htmx-settling {
+#main.page-fade.htmx-swapping {
   opacity: 0;
+}
+
+#main.page-fade.htmx-settling {
+  opacity: 1;
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -138,17 +141,18 @@ section a:hover {
 }
 
 .code-block pre {
-  overflow-x: auto;
   max-width: 100%;
   padding: 1rem;
-
+  overflow-x: auto;
   border-bottom-left-radius: 0.7rem;
   border-bottom-right-radius: 0.7rem;
-  background: #2e3440;
 }
+
 .code-block {
+  margin: 2rem 0;
   width: 100%;
   max-width: 100%;
+  background-color: var(--code-block);
 }
 
 /* ==============================
