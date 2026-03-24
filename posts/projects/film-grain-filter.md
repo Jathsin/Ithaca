@@ -16,7 +16,7 @@ seo_meta_og_url: "https://grafiquer.com/projects/film-grain-filter"
 
 1. 20 year old me had been listening to Them&I for a while (if you like downtempo/chill electronic vibes you should give it a try) and realised how aesthetic and vintage the front pages of his songs were. Soon, driven by my obession with old cameras and willing to replicate that effect in my pictures, I left vanilla java script for the first time and dove head first into: **WebGL 1.0**.
 
-<div class="w-full h-[550px] md:h-[700px] py-5">
+<div class="w-full h-[550px] md:h-[750px] py-5">
     <iframe class="block w-full h-full border-0"
         src="/projects/film-grain-filter/canvas.html"
     ></iframe>
