@@ -18,16 +18,20 @@
   --secondary: rgb(224, 219, 195);
   --slider: rgb(130, 112, 68);
   --text_1: #202373ff;
-  --text_2: rgb(101, 65, 7);
+  --text_2: rgba(101, 65, 7, 0.92);
   --logo: rgb(175, 152, 113);
   --code-block: #2e3440;
+
+  /* text */
+  --p_font: "Libre Baskerville", Georgia, serif;
+  --h_font: "Jersey 10", system-ui, sans-serif;
 }
 
 /* Typography: About / Articles */
 
 h1,
 h2 {
-  font-family: "Jersey 10", system-ui, sans-serif;
+  font-family: var(--h_font);
   letter-spacing: 0.01em;
 }
 
@@ -50,23 +54,37 @@ h2 {
 }
 
 .label {
-  font-family: "Jersey 10", system-ui, sans-serif;
+  font-family: var(--h_font);
   font-size: 0.98rem;
   line-height: 1.7;
-  color: rgba(101, 65, 7, 0.92);
+  color: var(--text_2);
 }
 
-.content,
+p,
 li {
-  font-family: "Libre Baskerville", Georgia, serif;
+  font-family: var(--p_font);
   font-size: 0.96rem;
   line-height: 1.7;
-  color: rgba(101, 65, 7, 0.92);
+  color: var(--text_2);
 }
 
-.content {
+p {
   margin-top: 0;
   margin-bottom: var(--margin-m);
+}
+
+.desc {
+  color: var(--text_2);
+  opacity: 0.7;
+  font-family: var(--p_font);
+  font-size: 15px;
+}
+
+.inherit {
+  margin: 0;
+  font: inherit;
+  color: inherit;
+  line-height: inherit;
 }
 
 ul {
@@ -161,7 +179,7 @@ section a:hover {
 
 /* Apply these classes inside each bento card */
 #bento-title {
-  font-family: "Jersey 10", system-ui, sans-serif;
+  font-family: var(--h_font);
   font-size: 1.45rem;
   line-height: 1;
   font-weight: 400;
@@ -231,4 +249,63 @@ input[type="range"]::-moz-range-thumb {
   height: 10px;
   border-radius: 50%;
   cursor: pointer;
+}
+
+/* tooltip */
+
+.tooltip {
+  position: relative;
+  cursor: help;
+}
+
+.tooltip::after {
+  content: attr(data-tooltip);
+  position: absolute;
+  bottom: 120%;
+  left: 50%;
+  transform: translateX(-50%);
+
+  background: black;
+  color: white;
+  padding: 6px 10px;
+  border-radius: 6px;
+  font-size: 0.8rem;
+
+  opacity: 0;
+  pointer-events: none;
+  white-space: nowrap;
+}
+
+.tooltip:hover::after {
+  opacity: 1;
+}
+
+/* diagrams */
+.diagram-box {
+  padding: 6px 10px;
+  border: 2px solid var(--text_2);
+  border-radius: 9999px;
+  font-family: var(--p_font);
+  font-size: 16px;
+  color: var(--text_2);
+  text-align: center;
+}
+
+.arrow-line {
+  flex: 1; /* 🔥 fills all space between boxes */
+  height: 2px;
+  background-color: var(--text_2);
+  position: relative;
+}
+
+.arrow-line::after {
+  content: "";
+  position: absolute;
+  right: 0;
+  top: 50%;
+  transform: translateY(-50%);
+
+  border-left: 6px solid var(--text_2);
+  border-top: 4px solid transparent;
+  border-bottom: 4px solid transparent;
 }

@@ -380,7 +380,7 @@ Use a logistic (sigmoid) so you can tune density with a threshold and contrast.
     startLoop();
   };
 
-  // // Keep canvas crisp if the viewport changes
+  // Keep canvas crisp if the viewport changes
   window.resizing = function () {
     if (!canvas || !ctx) return;
     resizeCanvasToDisplaySize();
@@ -388,61 +388,48 @@ Use a logistic (sigmoid) so you can tune density with a threshold and contrast.
     plot_perlin();
   };
 
-  // // // Initial load
-  // // window.addEventListener("DOMContentLoaded", () => {
-  // //   requestAnimationFrame(() => requestAnimationFrame(fadeInMain));
-  // //   init_perlin();
-  // // });
+  // Initial load
+  window.addEventListener("DOMContentLoaded", () => {
+    requestAnimationFrame(() => requestAnimationFrame(fade_in_main));
+    init_perlin();
+  });
 
-  // // // Stop rendering when navigating away (prevents duplicate loops)
-  // // // window.addEventListener("pagehide", stopLoop);
+  // Stop rendering when navigating away (prevents duplicate loops)
+  window.addEventListener("pagehide", stopLoop);
 
-  // // // Back/forward cache restore
-  // // window.addEventListener("pageshow", () => {
-  // //   // Allow a clean re-init if the element is restored
-  // //   const c = document.getElementById("perlinCanvas");
-  // //   if (c) c.dataset.perlinInit = "";
-  // //   init_perlin();
-  // // });
+  // htmx lifecycle (swap away / restore)
+  document.body.addEventListener("htmx:beforeSwap", () => {
+    stopLoop();
+    const c = document.getElementById("perlinCanvas");
+    if (c) c.dataset.perlinInit = "";
+  });
 
-  // // // htmx lifecycle (swap away / restore)
-  // // document.body.addEventListener("htmx:beforeSwap", () => {
-  // //   stopLoop();
-  // //   const c = document.getElementById("perlinCanvas");
-  // //   if (c) c.dataset.perlinInit = "";
-  // // });
+  document.body.addEventListener("htmx:historyRestore", () => {
+    const c = document.getElementById("perlinCanvas");
+    if (c) c.dataset.perlinInit = "";
+    init_perlin();
+  });
 
-  // // document.body.addEventListener("htmx:historyRestore", () => {
-  // //   const c = document.getElementById("perlinCanvas");
-  // //   if (c) c.dataset.perlinInit = "";
-  // //   init_perlin();
-  // // });
+  // afterSettle provides time for the browser to compute final layout
+  document.body.addEventListener("htmx:afterSettle", () => {
+    const c = document.getElementById("perlinCanvas");
+    if (!c) return;
+    c.dataset.perlinInit = ""; // force init path
+    init_perlin();
+  });
 
-  // // document.body.addEventListener("htmx:afterSwap", () => {
-  // //   const c = document.getElementById("perlinCanvas");
-  // //   if (c) {
-  // //     c.dataset.perlinInit = "";
-  // //     init_perlin();
-  // //   }
-  // // });
-
-  // // // afterSettle provides time for the browser to compute final layout
-  // // document.body.addEventListener("htmx:afterSettle", () => {
-  // //   const c = document.getElementById("perlinCanvas");
-  // //   if (!c) return;
-  // //   c.dataset.perlinInit = ""; // force init path
-  // //   init_perlin();
-  // // });
-
-  // let scrollY = 0;
-  // window.addEventListener("scroll", () => {
-  //   scrollY = window.scrollY;
-  // });
-
-  // function fadeInMain() {
-  //   const main = document.getElementById("main");
-  //   if (!main) return;
-  //   main.classList.remove("opacity-0");
-  //   main.classList.add("opacity-100");
-  // }
+  function fade_in_main() {
+    const main = document.getElementById("main");
+    if (!main) return;
+    main.classList.remove("opacity-0");
+    main.classList.add("opacity-100");
+  }
+  function reveal_canvas() {
+    const c = document.getElementById("perlinCanvas");
+    if (!c) return;
+    requestAnimationFrame(() => {
+      c.classList.remove("opacity-0");
+      c.classList.add("opacity-100");
+    });
+  }
 }

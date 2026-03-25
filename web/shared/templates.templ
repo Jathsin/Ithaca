@@ -34,6 +34,10 @@ templ Layout(canvas templ.Component, nav_bar templ.Component, content templ.Comp
 			<!-- syntac highlight for pieces of embedded code -->
 			<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/styles/default.min.css"/>
 			<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/highlight.min.js"></script>
+			<!-- katex for latex in markdown -->
+			<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.22/dist/katex.min.css"/>
+			<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.22/dist/katex.min.js"></script>
+			<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.22/dist/contrib/auto-render.min.js"></script>
 			<!-- fonts -->
 			<link rel="preconnect" href="https://fonts.googleapis.com"/>
 			<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
@@ -79,9 +83,9 @@ templ Nav_bar() {
 	<div
 		hx-push-url="true"
 		class="	fixed top-4 left-1/2 -translate-x-1/2 z-50
-					flex items-center py-2 px-5 bg-[var(--text_1)]/55
-					text-[var(--primary)] text-xl font-['Jersey_10'] rounded-full
-					backdrop-blur-sm backdrop-saturate-110 select-none"
+				flex items-center py-2 px-5 bg-[var(--text_1)]/55
+				text-[var(--primary)] text-xl font-['Jersey_10'] rounded-full
+				backdrop-blur-sm backdrop-saturate-110 select-none"
 	>
 		<!-- Left slot (fixed width so center item stays centered) -->
 		<div

@@ -45,12 +45,14 @@ if (!window.__components_loaded__) {
   });
 
   document.body.addEventListener("htmx:afterSettle", () => {
+    render_katex(document.body);
     if (window.location.pathname === "/") {
       window.init_perlin?.();
     }
   });
 
   window.addEventListener("pageshow", () => {
+    render_katex(document.body);
     if (window.location.pathname === "/") {
       window.init_perlin?.();
     }
@@ -73,6 +75,8 @@ if (!window.__components_loaded__) {
   window.addEventListener("pageshow", (e) => {
     if (e.persisted) console.log("pageshow: restored from bfcache");
   });
+
+  render_katex(document.body);
 }
 
 // Use event delegation so the accordion keeps working across HTMX swaps
@@ -96,6 +100,29 @@ function onAccordionClick(e) {
     // Ensure we measure the current content height each time
     panel.style.maxHeight = panel.scrollHeight + "px";
     if (icon) icon.style.transform = "rotate(90deg)";
+  }
+}
+
+function render_katex(root_element) {
+  if (!root_element) {
+    return;
+  }
+
+  if (typeof window.renderMathInElement !== "function") {
+    return;
+  }
+
+  try {
+    window.renderMathInElement(root_element, {
+      delimiters: [
+        { left: "$$", right: "$$", display: true },
+        { left: "\\[", right: "\\]", display: true },
+        { left: "\\(", right: "\\)", display: false },
+      ],
+      throwOnError: false,
+    });
+  } catch (error) {
+    console.error("Failed to render KaTeX:", error);
   }
 }
 

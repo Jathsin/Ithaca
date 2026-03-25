@@ -3,11 +3,15 @@ package landing
 templ perlin() {
 	<!-- Scrollable canvas container -->
 	<div class="relative w-full h-[100vh] overflow-y-scroll z-0">
-		<canvas id="perlinCanvas" class="sticky top-0 w-screen h-screen"></canvas>
+		<canvas
+			id="perlinCanvas"
+			class="sticky top-0 w-screen h-screen"
+		></canvas>
 		<div
 			class="hidden 
 				   md:flex flex-col gap-y-1  w-fit items-end bottom-20 right-30 absolute 
-				   text-[var(--text_2)]/60 text-xl select-none pointer-events-none"
+				   text-[var(--text_2)]/60 text-xl select-none pointer-events-none
+				   "
 		>
 			// Accordion
 			<button class="pointer-events-auto flex flex-row gap-2 items-center cursor-pointer accordion">
@@ -19,21 +23,21 @@ templ perlin() {
 				</svg>
 			</button>
 			<div class="pointer-events-auto panel text-[var(--text_2)]/70 text-[14px] mr-7 self-end text-right font-['Libre_Baskerville'] leading-relaxed w-[25%] panel-fade">
-				<p>
+				<p class="inherit">
 					A <i>perlin noise surface</i> is passed to a probabilistic function
 					to decide whether or not to plot each "dust point". It uses a
 					threshold which is sensitive to the distance from the center. Color interpolation adds a 
 					cosmic vibe to the scenery.
 				</p>
 				<br/>
-				<p>
+				<p class="inherit">
 					What you see is not drawn, but <i>sampled</i> everytime you refresh the page.
 				</p>
 				<br/>
 			</div>
-			<p class="pointer-events-auto text-[14px] uppercase cursor-pointer hover:underline mr-7">
+			<span class="pointer-events-auto text-[15px] uppercase cursor-pointer hover:underline mr-7">
 				<a href="https://github.com/Jathsin/Ithaca/blob/main/static/scripts/perlin.js">Check the code</a>
-			</p>
+			</span>
 		</div>
 	</div>
 	// landing 

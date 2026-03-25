@@ -1,209 +1,212 @@
 ---
-title: "WegGL-01: film grain filter"
+title: "WebGL-01: Film Grain Filter"
 slug: "film-grain-filter"
 parent: "projects"
-description: "Exploring film grain and noise generation using WebGL shaders."
+description: "A WebGL shader-based film grain effect exploring GPU rendering and procedural noise."
 order: 1
-headers: "Introduction, GPU vs CPU, WebGL Pipeline, Types of Noise"
-seo_title: "Film Grain Filter"
-seo_meta_description: "Exploring film grain and procedural noise using WebGL shaders."
-seo_meta_property_title: "Noise Filter"
-seo_meta_property_description: "A study of GPU-generated film grain and noise in WebGL."
+headers: "Introduction, What is WebGL, Rendering Pipeline, Shader Implementation, Noise Generation, Applications"
+seo_title: "WebGL Film Grain Filter — grafiquer"
+seo_meta_description: "Learn how to build a film grain shader using WebGL and GLSL, exploring GPU rendering and procedural noise."
+seo_meta_property_title: "WebGL Film Grain Filter"
+seo_meta_property_description: "A technical exploration of GPU-generated film grain using WebGL shaders."
 seo_meta_og_url: "https://grafiquer.com/projects/film-grain-filter"
 ---
 
-# WebGL-0: Film Grain Filter
+# WebGL-01: Film Grain Filter
 
-1. 20 year old me had been listening to Them&I for a while (if you like downtempo/chill electronic vibes you should give it a try) and realised how aesthetic and vintage the front pages of his songs were. Soon, driven by my obession with old cameras and willing to replicate that effect in my pictures, I left vanilla java script for the first time and dove head first into: **WebGL 1.0**.
+## Introduction
+
+20 year old me had been listening to _Them&I_, and became fascinated by the vintage texture of their album covers — subtle grain, imperfect noise, a feeling that digital images often lack. That led to a question:
+
+> Can I recreate film grain _procedurally_ using the GPU?
+
+This curiosity pushed me beyond vanilla JavaScript and into **WebGL 1.0**, where images are no longer just displayed — you program how they are _computed_. Follow this project to learn how to build your own film grain filter.
 
 <div class="w-full h-[550px] md:h-[750px] py-5">
-    <iframe class="block w-full h-full border-0"
+    <iframe
+        class="block w-full h-full border-0"
         src="/projects/film-grain-filter/canvas.html"
+        loading="eager"
+        title="Interactive film grain demo"
     ></iframe>
 </div>
 
-## Brief intro to WebGL
+## Tooling: what is WebGL?
 
-2. WebGL stands for Web Graphics Library, it is simply an API that allows web pages to access your GPU to render graphics using rasterization. That is, in computer graphics there are two main rendering approaches:
+**WebGL (Web Graphics Library)</span>** is a JavaScript API that allows direct access to the GPU for rendering graphics in the browser.
+It is built on top of **<span class="tooltip" data-tooltip="A low-level graphics API designed for embedded systems and mobile devices">OpenGL ES</span>**,  
+which acts as the bridge between your JavaScript code and the graphics hardware. Notice that WebGL exposes the rasterization-based
+pipeline of the GPU, not the complete engine. That is, we find two main rendering paradigms:
 
-- Ray tracing: simulates rays that hit objects in the scene, making them visible.
-- Rasterization: draw vertices -> build triangles -> color them -> image
+- **Ray Tracing</span>**
+  Simulates how light rays interact with objects to produce realistic images. It is physically accurate but computationally expensive.
 
-3. In other words, WebGL just exposes the rasterization pipeline of your GPU to the browser.
-   Both WebGl 1.0 and 2.0 call OpenGL ES functions through JS. This means we can write programms for the GPU (shaders), and this API (OpenGL) will send it. The language in which these programms are written OpenGL Shading Language (GLSL).
+- **Rasterization**
+  Vertices define geometries (ie. triangles) that are later processed into pixels.
 
-4. Notice to Mariners: I started with WebGL 1.0 because I thought it would help me appreciate and understand better 2.0, no other particular reason
-   The 2.0 version provides built-ins for matters that require extensions in 1.0.
-
-JavaScript
-↓
-WebGL API
-↓
-OpenGL ES API
-↓
-GPU driver
-↓
-GPU hardware
-
-JavaScript
-↓
-WebGL API
-↓
-OpenGL ES
-↓
-GLSL shaders
-↓
-GPU execution
-
-5. If rather than believing in your GPU you prefer to understand it (like me), I encourage you to check the official manual: <https://webglfundamentals.org/>, since this is not a tutorial per se. For the TLRD:
-
-## How the shader works
-
-6. The API is already built on the browser, so no need to download or embed a library. Actually, you could paste this code into ,<a href="https://jsfiddle.net/greggman/8djzyjL3/">Greggman´s </a> and play with it by yourself. In the following, how to develop a noise filter shader in a nutshell:
-
-7. First, you need a html canvas to start talking in WebGL.
-
-<div class="code-block bg-[var(--code-block)] rounded-[0.7rem]">
-   <div class="-mt-px w-full flex justify-end rounded-t-[0.7rem]">
-      <button class="copy-btn p-2 cursor-pointer opacity-85 hover:opacity-100 transition-opacity duration-200 ease-in-out">
-         <svg class="size-4.5" xmlns="http://www.w3.org/2000/svg" fill="var(--secondary)" viewBox="0 0 48 48" id="Copy--Streamline-Ionic-Filled">
-            <desc>
-               Copy Streamline Icon: https://streamlinehq.com
-            </desc>
-            <path d="M39.959 47.52H16.4397c-2.005 0 -3.9278 -0.7965 -5.3456 -2.2142 -1.4177 -1.4178 -2.2142 -3.3406 -2.2142 -5.3457V16.4407c0 -2.005 0.7965 -3.9277 2.2142 -5.3455 1.4178 -1.4177 3.3406 -2.2142 5.3456 -2.2142H39.959c2.0051 0 3.9279 0.7965 5.3457 2.2142 1.4177 1.4178 2.2142 3.3405 2.2142 5.3455v23.5194c0 2.0051 -0.7965 3.9279 -2.2142 5.3457 -1.4178 1.4177 -3.3406 2.2142 -5.3457 2.2142Z" stroke-width="1"></path>
-            <path d="M13.9207 5.5199h24.7668c-0.5227 -1.4729 -1.4884 -2.748 -2.7644 -3.6503C34.647 0.9673 33.1232 0.4819 31.5602 0.48H8.0409c-2.005 0 -3.9279 0.7965 -5.3456 2.2142S0.4811 6.0348 0.4811 8.0398v23.5194C0.483 33.122 0.9684 34.646 1.8707 35.922c0.9023 1.276 2.1774 2.2418 3.6502 2.7643V13.9197c0 -2.2278 0.885 -4.3644 2.4602 -5.9396 1.5753 -1.5753 3.7119 -2.4602 5.9396 -2.4602Z" stroke-width="1"></path>
-         </svg>
-      </button>
+   <div class="py-12 flex flex-col gap-6 items-center justify-center">
+      <div class="flex flex-row items-center justify-center gap-3 ">
+        <div class="diagram-box">JavaScript</div>
+        <div class="arrow-line"></div>
+        <div class="diagram-box">WebGL</div>
+        <div class="arrow-line"></div>
+        <div class="diagram-box">OpenGL ES</div>
+        <div class="arrow-line"></div>
+        <div class="diagram-box">GPU Driver</div>
+        <div class="arrow-line"></div>
+        <div class="diagram-box">GPU Hardware</div>
+      </div>
+      <div class="desc">Data flow</div>
    </div>
 
-```javascript
-var canvas = document.querySelector("canvas");
-var gl = canvas.getContext("webgl");
-if (!gl) {
-   throw new Error("could not initialise WebGL context");
+Where **<span class="tooltip" data-tooltip="A C-like language used to write programs that run directly on the GPU">GLSL (OpenGL Shading Language)</span>** is used to write programs for the GPU. They are called _shaders_.
+
+## Core Concept: Shaders
+
+A WebGL program is built around two shaders:
+
+- **Vertex Shader**: runs once per vertex and determines its position in clip space (explained later), that is, defines _geometry_.
+
+- **Fragment Shader**: runs once per fragment (potential pixel) and determines its color/texture.
+
+Important distinction: a vertex is a point in space, while a fragment is a _potential pixel_ (before visibility tests). That is, all information is computed before being displayed. For instance, imagine we want to render an apple hidden behind a wall. The apple vertices exist, as well as its fragments, but not its pixels.
+
+## Coordinate Systems (Critical Insight)
+
+WebGL works in **clip space**, a normalized coordinate system where x and y range from -1 to 1 (the cartesian coordinates you know).
+
+However, input coordinates are typically in `[0, 1]`, also known as **UV coordinates**. To obtain clip space from uv:
+
+$$
+x_{clip} = 2 \cdot x_{uv} - 1
+$$
+
+## Vertex Shader (Boilerplate)
+
+This shader maps positions to clip space and passes texture coordinates forward:
+
+```glsl
+attribute vec2 a_position;
+attribute vec2 a_tex_coord;
+uniform vec2 u_resolution;
+varying vec2 v_tex_coord;
+
+void main() {
+   vec2 clip_space = (a_position / u_resolution)*2.0 - 1.0;
+   gl_Position = vec4(clip_space*vec2(1,-1), 0, 1);
+
+   v_tex_coord = a_tex_coord;
+}
 ```
 
-</div>
+## Fragment Shader: Film Grain
 
-8. Then,
-9. WebGL shaders are constituted by two scripts:
+This is where the actual effect happens.
 
-- Vertex shader: specify where in the screen you will render vertices (not the same as pixels).
-- Fragment shader: properties of the fragments derived from those vertices.
+We simulate film grain by adding **<span class="tooltip" data-tooltip="Deterministic randomness computed mathematically, not truly random">pseudo-random noise</span>**
+to each pixel. For that we create a function:
 
-It is fine if you don´t understand the syntax, variable declaration, data types... You can check the manual and come back here afterwards.
-
-### How to load an image using WebGL
-
-### The real magic: Noise
-
-8. What this script is doing is basically changing how we reference coordinates
-   and telling where to render a vertex by asigning the coordinates of our texture
-   to gl_Position.
-
-<div class="code-block bg-[var(--code-block)] rounded-[0.7rem]">
-
-```javascript
-<script id="vertex_shader" type="x-shader/x-vertex">
-  // Which part of the image goes on which part of the triangle?
-  // That is why we define texCoord attribute
-  attribute vec2 a_position;
-  attribute vec2 a_tex_coord;
-  uniform vec2 u_resolution;
-  varying vec2 v_tex_coord;
-
-  void main() {
-     // convert coordinates to clip-space
-     vec2 zero_to_one = a_position / u_resolution;
-     vec2 zero_to_two = zero_to_one * 2.0;
-     vec2 clip_space = zero_to_two - 1.0;
-     gl_Position = vec4(clip_space*vec2(1,-1), 0, 1); // flip y-axis
-
-     // pass the texCoord to the fragment shader
-     // The GPU will interpolate this value between points.
-     v_tex_coord = a_tex_coord;
-  }
-</script>
+```glsl
+float rand(vec2 co){
+  return fract(sin(dot(co, vec2(12.9898, 78.233))) * 43758.5453);
+}
 ```
 
-</div>
+This produces a repeatable noise pattern based on pixel coordinates.
 
-<div class="code-block bg-[var(--code-block)] rounded-[0.7rem]">
+How do our two sliders (density and size) manipulate this pattern? First, notice in the next code block, that noise is applied by adding this random value to our color vector. Therefore, it all goes on computing `diff`.
 
-```javascript
-   <script id="fragment_shader" type="x-shader/x-fragment">
-     precision highp float;
+```glsl
+vec4 grain(vec4 fragColor){
+  vec4 color = fragColor;
 
-     uniform sampler2D u_image;
-     uniform vec2 u_resolution;
-     varying vec2 v_tex_coord;
-     uniform float blend_val;
-     uniform float grainsize;
+  vec2 cell = floor(gl_FragCoord.xy / grain_size);
+  float diff = rand(cell) - 0.5;
 
-     float rand(vec2 co){
-       return fract(sin(dot(co, vec2(12.9898, 78.233))) * 43758.5453);
-     }
-
-     // Brightness
-     vec4 grain(vec4 fragColor){
-       vec4 color = fragColor;
-
-       vec2 cell = floor(gl_FragCoord.xy / grainsize);
-       float diff = rand(cell) - 0.5;
-
-       color.rgb += diff;
-       return color;
-     }
-
-     void main() {
-         vec2 uv = gl_FragCoord.xy / u_resolution;
-         vec4 color = texture2D(u_image, v_tex_coord);
-         vec4 grain_val = grain(color);
-         gl_FragColor = mix(color, grain_val, blend_val);
-
-     }
-
-   </script>
+  color.rgb += diff;
+  return color;
+}
 ```
 
-</div>
+**Density**
 
-- Vertex shader
-- Fragment shader (what is fragment)
+We interpolate between the original color and the noisy color (`color.rgb += diff`) using `mix()`, a WebGL built-in for lerp. The third parameter, `blend_val`, does the role of t in the following formula. It measures how far the final color will lie from eache extreme.
 
-9. Check the full js code <a href="https://github.com/Jathsin/grafiquer/tree/main/projects/film-grain-filter">here</a>.
+$$
+c_{final} = t * c_{noisy} + (1 - t) * c_{original} \mid t \in [0,1]
+$$
 
-- GPU as a state machine (buffers, etc.)
-  example with buffer
+So:
 
-- `gl.*` constants
+- `blend_val = 0` → original image
+- `blend_val = 1` → full noise
 
-5. There is a library not to build your own functions and methods
+Notice that what we call noisy color, is actually named `grain_val` in our code.
 
-### Different kinds of noise
+```glsl
+gl_FragColor = mix(color, grain_val, blend_val);
+```
 
-4. I just discovered — GPT told me — that there are programs that talk directly to the GPU, whereas JavaScript normally talks to the CPU. These programs accelerate the rendering of pixels on screen. One of them is **WebGL**, which I intend to learn over time.
+**Size**
 
-   Check this resource: https://webglfundamentals.org/
+See that **<span class="tooltip" data-tooltip="Built-in variable containing the pixel's screen coordinates">gl_FragCoord</span>** changes per pixel.
 
-   Things to review:
-   - GPU as a state machine (buffers, etc.)
-   - `gl.*` constants
-   - The rendering pipeline
+To give the impression of an increase in size, pixels that are near each other to hold similar color values, that is, to apply a similar `diff` to each of them.
 
-5. Film grain reference:
-   https://maximmcnair.com/p/webgl-film-grain
+This is accomplished by dividing `gl_FragCoord.xy` by a constant, that is what we name `grain_size`. As the parameter increases, `cell` gets nearer 0 for every pixel, implying that similar values will be pased to `rand()`. Ar our random function is deterministic, similar diffs will be applied to the color of those pixels.
 
-## Applications
+This is the full fragment shader:
 
-I might write a tutorial further on.
+```glsl
+precision highp float;
 
-Resources
+uniform sampler2D u_image;
+uniform vec2 u_resolution;
+varying vec2 v_tex_coord;
+uniform float blend_val;
+uniform float grain_size;
 
-Learn more:
-https://bruno-simon.com/
+float rand(vec2 co){
+  return fract(sin(dot(co, vec2(12.9898, 78.233))) * 43758.5453);
+}
 
-https://glslsandbox.com/
-https://observablehq.com/@observable81?tab=recents
+vec4 grain(vec4 fragColor){
+  vec4 color = fragColor;
 
-https://maximmcnair.com/p/webgl-film-grain
+  vec2 cell = floor(gl_FragCoord.xy / grain_size);
+  float diff = rand(cell) - 0.5;
+
+  color.rgb += diff;
+  return color;
+}
+
+void main() {
+    vec4 color = texture2D(u_image, v_tex_coord);
+    vec4 grain_val = grain(color);
+    gl_FragColor = mix(color, grain_val, blend_val);
+}
+```
+
+## What I Learned
+
+- **GPU as a state machine**  
+  The GPU pipeline can be understood as a sequence of explicit states and commands. For example, when using a buffer:
+  - Allocate memory on the GPU and bind it to a target
+  - Configure how that memory will be read (attributes, pointers, layout)
+  - Upload data into that memory and issue draw calls that consume it
+
+- **Principles of noise generation**  
+  Learned how to build deterministic pseudo-random functions on the GPU and how to control their visual appearance (intensity and scale) through parameters like `blend_val` and `grain_size`.
+
+- **Embedding projects with iframes**  
+  Used `<iframe>` to isolate and load interactive WebGL content within the page, keeping the main layout clean while enabling reusable, self-contained demos.
+
+---
+
+## Resources
+
+- https://webglfundamentals.org/
+- https://glslsandbox.com/
+- https://bruno-simon.com/
+
+<iframe class="mt-10 mx-auto" data-testid="embed-iframe" style="border-radius:12px" src="https://open.spotify.com/embed/track/1iBZ54hEvr2EYk44MgfD7X?utm_source=generator" width="70%" height="352" frameBorder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
