@@ -390,7 +390,6 @@ Use a logistic (sigmoid) so you can tune density with a threshold and contrast.
 
   // Initial load
   window.addEventListener("DOMContentLoaded", () => {
-    requestAnimationFrame(() => requestAnimationFrame(fade_in_main));
     init_perlin();
   });
 
@@ -423,11 +422,4 @@ Use a logistic (sigmoid) so you can tune density with a threshold and contrast.
     c.dataset.perlinInit = ""; // force init path
     init_perlin();
   });
-
-  function fade_in_main() {
-    const main = document.getElementById("main");
-    if (!main) return;
-    main.classList.remove("opacity-0");
-    main.classList.add("opacity-100");
-  }
 }

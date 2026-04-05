@@ -1,13 +1,5 @@
 package projects
 
-import (
-	"golang.org/x/text/cases"
-	"golang.org/x/text/language"
-	"strings"
-)
-
-var title_case = cases.Title(language.English)
-
 templ projects(projects_list []Project) {
 	if len(projects_list) == 0 {
 		<section
@@ -19,12 +11,12 @@ templ projects(projects_list []Project) {
 		</section>
 	} else {
 		<section
-			class=" mx-auto md:py-35 py-28 max-w-[80%] lg:max-w-[30%]
-				 	gap-5 justify-items-center grid lg:grid-cols-[repeat(auto-fit,minmax(240px,1fr))] sm:grid-cols-1"
+			class=" mx-auto md:py-35 py-28 max-w-[80%] lg:max-w-[60%]
+				 	gap-5 justify-items-center grid lg:grid-cols-[repeat(auto-fit,minmax(240px,1fr))] grid-cols-1"
 		>
 			for _, project := range projects_list {
 				<a
-					hx-get={ templ.URL("/projects/" + project.Name) }
+					hx-get={ templ.URL("/projects/" + project.Slug) }
 					hx-target="#main"
 					hx-swap="innerHTML swap:100ms settle:100ms"
 					class=" w-full max-h-[500px] 
@@ -33,7 +25,7 @@ templ projects(projects_list []Project) {
 							cursor-pointer"
 				>
 					<div id="bento-header">
-						<div id="bento-title">{ title_case.String(strings.ReplaceAll(project.Name , "_", " ")) }</div>
+						<div id="bento-title">{ project.Title }</div>
 						<div id="bento-date">{ project.Date }</div>
 					</div>
 				</a>

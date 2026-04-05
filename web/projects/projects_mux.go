@@ -1,6 +1,7 @@
 package projects
 
 import (
+	"fmt"
 	"jathsin/posts"
 	"jathsin/types"
 	"jathsin/utils"
@@ -10,6 +11,7 @@ import (
 	"net/http"
 	"os"
 	"path/filepath"
+	"strings"
 
 	"github.com/a-h/templ"
 )
@@ -41,8 +43,9 @@ func Get_mux() (*http.ServeMux, error) {
 }
 
 type Project struct {
-	Name string
-	Date string
+	Slug  string
+	Title string
+	Date  string
 }
 
 var seo_projects = types.SEO{
@@ -57,19 +60,34 @@ var seo_projects = types.SEO{
 func projects_handler(w http.ResponseWriter, r *http.Request) {
 
 	// Get project list
-	entries, _ := os.ReadDir("projects")
+	entries, _ := os.ReadDir("posts/projects")
 	var projects_list []Project
 
 	for _, e := range entries {
-		if !e.IsDir() {
+		if e.IsDir() || filepath.Ext(e.Name()) != ".md" {
 			continue
 		}
 
-		info, _ := os.Stat(filepath.Join("projects", e.Name()))
+		filename := filepath.Join("posts", "projects", e.Name())
+		info, err := os.Stat(filename)
+		if err != nil {
+			continue
+		}
+
+		content, err := os.ReadFile(filename)
+		if err != nil {
+			continue
+		}
+
+		title, slug, err := parse_project_front_matter(content)
+		if err != nil {
+			continue
+		}
 
 		projects_list = append(projects_list, Project{
-			Name: e.Name(),
-			Date: info.ModTime().Format("02-Jan-2006"),
+			Slug:  slug,
+			Title: title,
+			Date:  info.ModTime().Format("02-Jan-2006"),
 		})
 	}
 
@@ -97,4 +115,47 @@ func show_project_handler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	templ.Handler(ui.Layout(nil, ui.Nav_bar(), project(content), seo.SEO)).ServeHTTP(w, r)
+}
+
+func parse_project_front_matter(content []byte) (string, string, error) {
+	text := string(content)
+	parts := strings.SplitN(text, "---", 3)
+	if len(parts) < 3 || strings.TrimSpace(parts[0]) != "" {
+		return "", "", fmt.Errorf("missing or invalid front matter")
+	}
+
+	var title string
+	var slug string
+
+	for line := range strings.SplitSeq(strings.TrimSpace(parts[1]), "\n") {
+		line = strings.TrimSpace(line)
+		if line == "" {
+			continue
+		}
+
+		key, value, found := strings.Cut(line, ":")
+		if !found {
+			continue
+		}
+
+		key = strings.TrimSpace(key)
+		value = strings.Trim(strings.TrimSpace(value), `"`)
+
+		switch key {
+		case "title":
+			title = value
+		case "slug":
+			slug = value
+		}
+	}
+
+	if slug == "" {
+		return "", "", fmt.Errorf("missing slug")
+	}
+
+	if title == "" {
+		title = slug
+	}
+
+	return title, slug, nil
 }

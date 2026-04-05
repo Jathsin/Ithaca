@@ -132,12 +132,9 @@ section a:hover {
   will-change: opacity;
 }
 
-#main.page-fade.htmx-swapping {
-  opacity: 0;
-}
-
+#main.page-fade.htmx-swapping,
 #main.page-fade.htmx-settling {
-  opacity: 1;
+  opacity: 0;
 }
 
 @media (prefers-reduced-motion: reduce) {

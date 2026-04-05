@@ -192,7 +192,7 @@ func Not_found() templ.Component {
 			templ_7745c5c3_Var8 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 12, "<section class=\"min-h-screen w-full pt-65 flex flex-col items-center font-['Jersey_10'] text-[var(--text_1)]/82\"><p class=\"text-[120px]\">404</p><h2 class=\"text-2xl mt-3\">Still working on this page. Come back soon!</h2></section>")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 12, "<section class=\"min-h-screen w-full pt-65 flex flex-col items-center font-['Jersey_10'] text-[var(--text_1)]/82\"><span class=\"text-[120px]\">404</span><h2 class=\"text-2xl mt-3\">Still working on this page. Come back soon!</h2></section>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
