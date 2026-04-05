@@ -410,6 +410,12 @@ Use a logistic (sigmoid) so you can tune density with a threshold and contrast.
     init_perlin();
   });
 
+  document.body.addEventListener("htmx:beforeSwap", () => {
+    stopLoop();
+    const c = document.getElementById("perlinCanvas");
+    if (c) c.dataset.perlinInit = "";
+  });
+
   // afterSettle provides time for the browser to compute final layout
   document.body.addEventListener("htmx:afterSettle", () => {
     const c = document.getElementById("perlinCanvas");
@@ -423,13 +429,5 @@ Use a logistic (sigmoid) so you can tune density with a threshold and contrast.
     if (!main) return;
     main.classList.remove("opacity-0");
     main.classList.add("opacity-100");
-  }
-  function reveal_canvas() {
-    const c = document.getElementById("perlinCanvas");
-    if (!c) return;
-    requestAnimationFrame(() => {
-      c.classList.remove("opacity-0");
-      c.classList.add("opacity-100");
-    });
   }
 }
