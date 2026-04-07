@@ -14,8 +14,6 @@ seo_meta_og_url: "https://grafiquer.com/projects/bezier-flight"
 
 # p5-01: Bezier Flight
 
-## Introduction
-
 Some projects begin with a technical question. This one began with a visual one:
 
 > How the hell can a Chinese Dragon be procedurally programmed?
@@ -24,7 +22,14 @@ The result is a small animation in which a point glides through chained **cubic 
 
 This project is not about simulation in the physical sense. It is about using a geometric object, the Bezier curve, as a scaffold for controlled motion.
 
-<!-- ANIMATION -->
+<div class="mx-auto my-5 w-full max-w-[920px] overflow-hidden rounded-[12px] aspect-[4/3] max-h-[420px] sm:max-h-[520px] md:max-h-[640px]">
+    <iframe
+        class="block w-full h-full border-0"
+        loading="eager"
+        title="Interactive Bezier Flight demo"
+        src="https://editor.p5js.org/Jathsin/full/CPtKO1-tH"
+    ></iframe>
+</div>
 
 Click <a href="https://editor.p5js.org/Jathsin/sketches/CPtKO1-tH">here</a> to play with the code in your browser and see by yourself where you can take it. Everything, from the tool used to the mathematical foundations are explained in the following sections:
 
@@ -47,16 +52,20 @@ The whole motion is driven by one function: evaluating a cubic Bezier curve.
 
 To understand Bezier curves, it is useful to introduce the notion of a **barycenter** (or weighted average of points).
 
-Given points \(P*1, \dots, P_m\) with associated weights \(\alpha^1, \dots, \alpha^m\) such that
-\[
+Given points \(P\*1, \dots, P_m\) with associated weights \(\alpha^1, \dots, \alpha^m\) such that
+
+$$
 \alpha^1 + \cdots + \alpha^m \neq 0,
-\]
+$$
+
 their barycenter \(B\) is defined by
-\[
+
+$$
 \overrightarrow{PB}
 = \frac{\alpha^1 \overrightarrow{PP_1} + \cdots + \alpha^m \overrightarrow{PP_m}}{\alpha^1 + \cdots + \alpha^m}
 = \frac{\sum*{k=1}^{m} \alpha^k \overrightarrow{PP*k}}{\sum*{k=1}^{m} \alpha^k},
-\]
+$$
+
 for any reference point \(P\).
 
 A key property is that this definition does **not depend on the choice of \(P\)**. You may skip the proof, I provide it for the curious.
@@ -64,15 +73,17 @@ A key property is that this definition does **not depend on the choice of \(P\)*
 Proof:
 
 If we choose another point \(Q\), we obtain the same barycenter:
-\[
+
+$$
 \overrightarrow{QB}
 = \frac{\sum*{k=1}^{m} \alpha^k \overrightarrow{QP_k}}{\sum*{k=1}^{m} \alpha^k}.
-\]
+$$
 
 This allows a more compact affine expression when the weights sum to one:
-\[
+
+$$
 B = \alpha^1 P*1 + \cdots + \alpha^m P_m, \quad \text{with} \quad \sum*{k=1}^m \alpha^k = 1.
-\]
+$$
 
 A simple example is the barycenter of a triangle: if three points have equal weights, their barycenter is the centroid.
 
@@ -83,21 +94,26 @@ A simple example is the barycenter of a triangle: if three points have equal wei
 Notice than the baycenter is usually the equidistant point from a set of points when all weights are uniformly distributed. However, we may
 use a different distribution of weights, and we would get different barycenters.
 
-A Bezier curve can be understood as the line described by the barycenters associated to a fixed set of points, each of which are given by a different weight configuration depending on a parameter \(t \in [0,1]\) and always sum to one.
+A Bezier curve can be understood as the line described by the barycenters associated to a fixed set of points, each of which are given by a different weight configuration depending on a parameter \(t \in [0,1]\).
 
 For a cubic Bezier curve defined by control points \(P_0, P_1, P_2, P_3\), the weights are:
-\[
+
+$$
 (1-t)^3,\quad 3(1-t)^2 t,\quad 3(1-t)t^2,\quad t^3,
-\]
+$$
+
 which satisfy
-\[
+
+$$
 (1-t)^3 + 3(1-t)^2 t + 3(1-t)t^2 + t^3 = 1.
-\]
+$$
 
 Therefore, the point on the curve can be interpreted as the barycenter
-\[
+
+$$
 B(t) = \sum\_{k=0}^{3} \alpha_k(t)\, P_k,
-\]
+$$
+
 with Bernstein weights \(\alpha_k(t)\).
 
 This perspective is powerful: instead of thinking of Bezier curves as abstract polynomials, we can see them as **weighted averages of control points whose influence shifts smoothly over time**.

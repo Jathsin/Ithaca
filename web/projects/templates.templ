@@ -19,6 +19,7 @@ templ projects(projects_list []Project) {
 					hx-get={ templ.URL("/projects/" + project.Slug) }
 					hx-target="#main"
 					hx-swap="innerHTML swap:100ms settle:100ms"
+					hx-push-url="true"
 					class=" w-full max-h-[500px] 
 							flex flex-col p-4
 							aspect-square bg-[var(--logo)]/10 rounded-[25px]
@@ -34,9 +35,8 @@ templ projects(projects_list []Project) {
 	}
 }
 
-// TODO: think how to pass content formatted with Goldmark
 templ project(content templ.Component) {
-	<section class="mx-auto pt-20 pb-30 max-w-[70%] md:max-w-[50%] font-['Libre_Baskerville'] text-[13px]">
+	<section class="project-content mx-auto pt-20 pb-30 md:max-w-[50%] lg:max-w-[50\%] font-['Libre_Baskerville'] text-[13px]">
 		@content
 	</section>
 }

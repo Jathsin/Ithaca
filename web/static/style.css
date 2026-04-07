@@ -170,6 +170,46 @@ section a:hover {
   background-color: var(--code-block);
 }
 
+.project-content > * {
+  max-width: 100%;
+}
+
+.project-content p,
+.project-content li,
+.project-content a,
+.project-content code,
+.project-content strong,
+.project-content em {
+  overflow-wrap: anywhere;
+  word-break: break-word;
+}
+
+.project-content pre,
+.project-content .code-block,
+.project-content .katex-display {
+  max-width: 100%;
+  overflow-x: auto;
+  overflow-y: hidden;
+}
+
+.project-content img,
+.project-content svg,
+.project-content canvas,
+.project-content iframe {
+  max-width: 100%;
+}
+
+.project-content .katex-display {
+  padding-bottom: 0.25rem;
+}
+
+@media (min-width: 768px) {
+  .project-content {
+    padding-left: 0;
+    padding-right: 0;
+  }
+}
+
 /* ==============================
    Bento boxes: title + date
    ============================== */
@@ -305,4 +345,15 @@ input[type="range"]::-moz-range-thumb {
   border-left: 6px solid var(--text_2);
   border-top: 4px solid transparent;
   border-bottom: 4px solid transparent;
+}
+
+.diagram-scroll {
+  width: 100%;
+  max-width: 100%;
+  overflow-x: auto;
+  overflow-y: hidden;
+}
+
+.diagram-row {
+  min-width: max-content;
 }

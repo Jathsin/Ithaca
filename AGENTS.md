@@ -2,6 +2,7 @@
 
 - Check all related files when requried but no need to check full project structure for each prompt.
 - When asked to solve an issue, explain why it was happening and how you solved it.
+- Brutal honesty, never shape truth to satisfy me.
 
 # code style
 
