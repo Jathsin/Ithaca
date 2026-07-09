@@ -1,11 +1,16 @@
-<head>
-  <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
-  <link rel="stylesheet" href="/web/static/style.css" />
-</head>
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <link rel="stylesheet" href="/web/static/style.css" />
+  </head>
+  <body class="m-0 overflow-x-hidden bg-[var(--primary)]">
 <div
-  class="flex flex-col justify-center items-center gap-y-5 lg:items-start md:gap-x-2 md:flex-row"
+  class="mx-auto flex w-full max-w-[760px] flex-col justify-center items-center gap-y-5 px-2 lg:items-start lg:gap-x-4 lg:flex-row"
 >
-  <div class="flex flex-col lg:justify-center items-center lg:gap-y-20 pt-2">
+  <div class="flex w-full max-w-[320px] flex-col lg:w-[180px] lg:justify-center items-center lg:gap-y-20 pt-2">
     <div
       class="w-full flex flex-row gap-x-5 justify-start items-center lg:justify-center lg:flex-col gap-y-2"
     >
@@ -43,8 +48,8 @@
       </div>
     </div>
   </div>
-  <div class="flex flex-col justify-center items-center w-fit gap-y-2">
-    <canvas id="canvas" class="block w-full aspect-square h-auto"></canvas>
+  <div class="flex w-full max-w-[520px] flex-col justify-center items-center gap-y-2">
+    <canvas id="canvas" class="block w-full max-w-full aspect-square h-auto"></canvas>
     <div class="flex flex-row justify-center gap-x-2">
       <img
         id="image_1"
@@ -118,3 +123,5 @@
   type="module"
   src="/projects/film-grain-filter/static/filter.js"
 ></script>
+  </body>
+</html>
