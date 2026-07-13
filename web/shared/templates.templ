@@ -83,36 +83,49 @@ templ Nav_bar() {
 	<div
 		hx-push-url="true"
 		class="	fixed top-4 left-1/2 -translate-x-1/2 z-50
-				flex items-center py-2 px-5 bg-[var(--text_1)]/55
-				text-[var(--primary)] text-xl font-['Jersey_10'] rounded-full
+				flex items-center gap-x-5 py-2 px-5 bg-[var(--text_1)]/55
+				text-[var(--primary)] text-lg sm:text-xl font-['Jersey_10'] rounded-full
 				backdrop-blur-sm backdrop-saturate-110 select-none"
 	>
-		<!-- Left slot (fixed width so center item stays centered) -->
 		<div
 			hx-get="/articles"
 			hx-target="#main"
 			hx-swap="innerHTML swap:100ms settle:100ms"
-			class="	w-16 text-right
-					glow
+			class="	glow
 					hover:underline transition-colors duration-150 ease-in cursor-pointer"
 		>
 			articles
 		</div>
-		<!-- Center slot -->
-		<div
-			hx-get="/projects"
-			hx-target="#main"
-			hx-swap="innerHTML swap:100ms settle:100ms"
-			class="mx-4 hover:underline transition-colors duration-150 ease-in cursor-pointer glow"
-		>
-			projects
+		<div id="projects-dropdown-menu" class="dropdown-menu relative">
+			<button
+				type="button"
+				id="projects-dropdown-menu-trigger"
+				aria-haspopup="menu"
+				aria-controls="projects-dropdown-menu-menu"
+				aria-expanded="false"
+				class="glow hover:underline transition-colors duration-150 ease-in cursor-pointer"
+			>
+				projects
+			</button>
+			<div id="projects-dropdown-menu-popover" data-popover aria-hidden="true" class="dropdown-popover">
+				<div role="menu" id="projects-dropdown-menu-menu" aria-labelledby="projects-dropdown-menu-trigger">
+					<div role="group" aria-labelledby="projects-dropdown-heading">
+						<div role="heading" id="projects-dropdown-heading">Projects</div>
+						<a role="menuitem" href="/projects#graphics">
+							<span>Graphics</span>
+						</a>
+						<a role="menuitem" href="/projects#video">
+							<span>Video</span>
+						</a>
+					</div>
+				</div>
+			</div>
 		</div>
-		<!-- Right slot (fixed width so center item stays centered) -->
 		<div
 			hx-get="/about"
 			hx-target="#main"
 			hx-swap="innerHTML swap:100ms settle:100ms"
-			class="w-12 text-left hover:underline transition-colors duration-150 ease-in cursor-pointer glow"
+			class="glow hover:underline transition-colors duration-150 ease-in cursor-pointer"
 		>
 			about
 		</div>

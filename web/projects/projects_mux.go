@@ -50,9 +50,9 @@ type Project struct {
 
 var seo_projects = types.SEO{
 	Title:                     "Projects",
-	Meta_description:          "Interactive graphics experiments built with WebGL, shaders, and procedural systems. Explore visual simulations, noise generators, and generative graphics.",
-	Meta_property_title:       "Graphics Projects — Grafiquer",
-	Meta_property_description: "Explore interactive graphics experiments including procedural noise, shader filters, generative systems, and visual simulations.",
+	Meta_description:          "Visual projects by Juan Miguel Reyes: computer graphics, shaders, procedural systems, video editing, motion graphics, and storytelling.",
+	Meta_property_title:       "Projects — Grafiquer",
+	Meta_property_description: "Explore graphics and video projects connecting visual computing, editing, motion, and storytelling.",
 	Meta_Og_URL:               "https://grafiquer.com/projects",
 }
 

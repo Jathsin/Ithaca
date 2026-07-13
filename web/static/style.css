@@ -119,6 +119,73 @@ em {
   text-shadow: 0 0 30px rgba(34, 16, 104, 0.35);
 }
 
+.dropdown-menu button {
+  font: inherit;
+  color: inherit;
+  background: transparent;
+  border: 0;
+  padding: 0;
+}
+
+.dropdown-menu::after {
+  content: "";
+  position: absolute;
+  top: 100%;
+  left: -0.75rem;
+  right: -0.75rem;
+  height: 0.75rem;
+}
+
+.dropdown-popover {
+  position: absolute;
+  top: calc(100% + 0.55rem);
+  left: 50%;
+  width: 9rem;
+  padding: 0.5rem;
+  border-radius: 0.75rem;
+  background: rgba(32, 35, 115, 0.72);
+  color: var(--primary);
+  opacity: 0;
+  pointer-events: none;
+  transform: translate(-50%, -0.25rem);
+  transition:
+    opacity 120ms ease,
+    transform 120ms ease;
+  backdrop-filter: blur(8px) saturate(110%);
+}
+
+.dropdown-menu:hover .dropdown-popover,
+.dropdown-menu:focus-within .dropdown-popover {
+  opacity: 1;
+  pointer-events: auto;
+  transform: translate(-50%, 0);
+}
+
+.dropdown-popover [role="heading"] {
+  padding: 0.15rem 0.45rem 0.35rem;
+  color: color-mix(in srgb, var(--primary) 70%, transparent);
+  font-size: 0.9rem;
+  line-height: 1;
+}
+
+.dropdown-popover [role="menuitem"] {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  padding: 0.35rem 0.45rem;
+  border-radius: 0.45rem;
+  color: var(--primary);
+  line-height: 1;
+  text-decoration: none;
+}
+
+.dropdown-popover [role="menuitem"]:hover,
+.dropdown-popover [role="menuitem"]:focus {
+  background: rgba(248, 246, 222, 0.12);
+  outline: none;
+  text-decoration: none;
+}
+
 /* Links inside long-form text */
 section a {
   color: rgba(32, 35, 115, 0.78);
