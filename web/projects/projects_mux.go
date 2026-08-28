@@ -50,9 +50,9 @@ type Project struct {
 
 var seo_projects = types.SEO{
 	Title:                     "Projects",
-	Meta_description:          "Visual projects by Juan Miguel Reyes: computer graphics, shaders, procedural systems, video editing, motion graphics, and storytelling.",
+	Meta_description:          "Computer graphics projects by Juan Miguel Reyes: shaders, procedural systems, interactive experiments, and technical visual work.",
 	Meta_property_title:       "Projects — Grafiquer",
-	Meta_property_description: "Explore graphics and video projects connecting visual computing, editing, motion, and storytelling.",
+	Meta_property_description: "Explore computer graphics projects connecting shaders, procedural systems, and visual computing.",
 	Meta_Og_URL:               "https://grafiquer.com/projects",
 }
 
@@ -87,7 +87,7 @@ func projects_handler(w http.ResponseWriter, r *http.Request) {
 		projects_list = append(projects_list, Project{
 			Slug:  slug,
 			Title: title,
-			Date:  info.ModTime().Format("02-Jan-2006"),
+			Date:  info.ModTime().Format("02 Jan 2006"),
 		})
 	}
 

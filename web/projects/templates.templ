@@ -1,68 +1,39 @@
 package projects
 
 templ projects(projects_list []Project) {
-	<section class="mx-auto w-[min(90vw,980px)] pt-28 pb-30 font-['Libre_Baskerville'] text-[13px]">
-		<div class="mb-12">
-			<h1>Projects</h1>
-			<p>
-				Visual work across computer graphics and video storytelling.
-			</p>
-		</div>
-		<section id="graphics" class="scroll-mt-24">
-			<div class="mb-6">
-				<h2>Computer Graphics</h2>
-				<p>
-					Shaders, procedural systems, interactive experiments, and technical visual work.
-				</p>
-			</div>
+	<section class="mx-auto w-[min(90vw,980px)] pt-28 pb-30  text-[13px]">
+		<section>
 			if len(projects_list) == 0 {
 				<div class="py-14 text-center font-['Jersey_10'] text-[var(--text_1)]/82">
 					<h2 class="text-2xl mt-4">No graphics projects yet</h2>
 				</div>
 			} else {
 				<div class="grid grid-cols-1 gap-5 justify-items-center lg:grid-cols-[repeat(auto-fit,minmax(240px,1fr))]">
-			for _, project := range projects_list {
-				<a
-					hx-get={ templ.URL("/projects/" + project.Slug) }
-					hx-target="#main"
-					hx-swap="innerHTML swap:100ms settle:100ms"
-					hx-push-url="true"
-					class=" w-full max-h-[500px] 
+					for _, project := range projects_list {
+						<a
+							hx-get={ templ.URL("/projects/" + project.Slug) }
+							hx-target="#main"
+							hx-swap="innerHTML swap:100ms settle:100ms"
+							hx-push-url="true"
+							class=" w-full max-h-[500px] 
 							flex flex-col p-4
 							aspect-square bg-[var(--logo)]/10 rounded-[25px]
 							cursor-pointer"
-				>
-					<div id="bento-header">
-						<div id="bento-title">{ project.Title }</div>
-						<div id="bento-date">{ project.Date }</div>
-					</div>
-				</a>
-			}
+						>
+							<div id="bento-header">
+								<div id="bento-title">{ project.Title }</div>
+								<div id="bento-date">{ project.Date }</div>
+							</div>
+						</a>
+					}
 				</div>
 			}
-		</section>
-		<section id="video" class="scroll-mt-24 mt-18">
-			<div class="mb-6">
-				<h2>Video & Storytelling</h2>
-				<p>
-					Editing, documentary work, visual essays, motion graphics, and client-oriented pieces.
-				</p>
-			</div>
-			<div class="w-full min-h-[220px] flex flex-col justify-between p-4 bg-[var(--logo)]/10 rounded-[25px]">
-				<div id="bento-header">
-					<div id="bento-title">Editing reel and selected video work</div>
-					<div id="bento-date">coming soon</div>
-				</div>
-				<p class="desc mt-auto">
-					This section will collect previous editing work and future pieces that connect film, rhythm, image, and visual computing.
-				</p>
-			</div>
 		</section>
 	</section>
 }
 
 templ project(content templ.Component) {
-	<section class="project-content mx-auto w-[min(90vw,760px)] pt-20 pb-30 font-['Libre_Baskerville'] text-[13px]">
+	<section class="project-content mx-auto w-[min(90vw,760px)] pt-20 pb-30 text-[13px]">
 		@content
 	</section>
 }

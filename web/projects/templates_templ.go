@@ -29,7 +29,7 @@ func projects(projects_list []Project) templ.Component {
 			templ_7745c5c3_Var1 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 1, "<section class=\"mx-auto w-[min(90vw,980px)] pt-28 pb-30 font-['Libre_Baskerville'] text-[13px]\"><div class=\"mb-12\"><h1>Projects</h1><p>Visual work across computer graphics and video storytelling.</p></div><section id=\"graphics\" class=\"scroll-mt-24\"><div class=\"mb-6\"><h2>Computer Graphics</h2><p>Shaders, procedural systems, interactive experiments, and technical visual work.</p></div>")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 1, "<section class=\"mx-auto w-[min(90vw,980px)] pt-28 pb-30 text-[13px]\"><section>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -51,7 +51,7 @@ func projects(projects_list []Project) templ.Component {
 				var templ_7745c5c3_Var2 string
 				templ_7745c5c3_Var2, templ_7745c5c3_Err = templ.JoinStringErrs(templ.URL("/projects/" + project.Slug))
 				if templ_7745c5c3_Err != nil {
-					return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/projects/templates.templ`, Line: 26, Col: 52}
+					return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/projects/templates.templ`, Line: 14, Col: 54}
 				}
 				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var2))
 				if templ_7745c5c3_Err != nil {
@@ -64,7 +64,7 @@ func projects(projects_list []Project) templ.Component {
 				var templ_7745c5c3_Var3 string
 				templ_7745c5c3_Var3, templ_7745c5c3_Err = templ.JoinStringErrs(project.Title)
 				if templ_7745c5c3_Err != nil {
-					return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/projects/templates.templ`, Line: 36, Col: 43}
+					return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/projects/templates.templ`, Line: 24, Col: 45}
 				}
 				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var3))
 				if templ_7745c5c3_Err != nil {
@@ -77,7 +77,7 @@ func projects(projects_list []Project) templ.Component {
 				var templ_7745c5c3_Var4 string
 				templ_7745c5c3_Var4, templ_7745c5c3_Err = templ.JoinStringErrs(project.Date)
 				if templ_7745c5c3_Err != nil {
-					return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/projects/templates.templ`, Line: 37, Col: 41}
+					return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/projects/templates.templ`, Line: 25, Col: 43}
 				}
 				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var4))
 				if templ_7745c5c3_Err != nil {
@@ -93,7 +93,7 @@ func projects(projects_list []Project) templ.Component {
 				return templ_7745c5c3_Err
 			}
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 9, "</section><section id=\"video\" class=\"scroll-mt-24 mt-18\"><div class=\"mb-6\"><h2>Video & Storytelling</h2><p>Editing, documentary work, visual essays, motion graphics, and client-oriented pieces.</p></div><div class=\"w-full min-h-[220px] flex flex-col justify-between p-4 bg-[var(--logo)]/10 rounded-[25px]\"><div id=\"bento-header\"><div id=\"bento-title\">Editing reel and selected video work</div><div id=\"bento-date\">coming soon</div></div><p class=\"desc mt-auto\">This section will collect previous editing work and future pieces that connect film, rhythm, image, and visual computing.</p></div></section></section>")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 9, "</section></section>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -122,7 +122,7 @@ func project(content templ.Component) templ.Component {
 			templ_7745c5c3_Var5 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 10, "<section class=\"project-content mx-auto w-[min(90vw,760px)] pt-20 pb-30 font-['Libre_Baskerville'] text-[13px]\">")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 10, "<section class=\"project-content mx-auto w-[min(90vw,760px)] pt-20 pb-30 text-[13px]\">")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
