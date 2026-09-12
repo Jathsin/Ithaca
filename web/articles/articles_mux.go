@@ -29,8 +29,6 @@ var seo = types.SEO{
 }
 
 func still_working(w http.ResponseWriter, r *http.Request) {
-	w.Header().Set("Content-Type", "text/plain; charset=utf-8")
-
 	if utils.IsHTMX(r) {
 		templ.Handler(ui.Not_found()).ServeHTTP(w, r)
 		return

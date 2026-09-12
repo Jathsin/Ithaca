@@ -4,7 +4,7 @@ if (!window.__perlin_loaded__) {
   window.__perlin_loaded__ = true;
 
   // VECTOR CLASS
-  class Vector2D {
+  class vector_2d {
     constructor(x, y) {
       this.x = x;
       this.y = y;
@@ -16,7 +16,7 @@ if (!window.__perlin_loaded__) {
     dot(v) {
       return this.x * v.x + this.y * v.y;
     }
-    toString() {
+    to_key() {
       return `${this.x},${this.y}`;
     }
   }
@@ -34,26 +34,24 @@ r := radius.
     n = 100,
     s = 2,
     r = 1.1;
-  const eps = 1e-6; // Small epsilon used across functions to avoid division by zero
+  const EPSILON = 1e-6; // Small epsilon used across functions to avoid division by zero
   let d = Math.floor(w / n);
 
   // ---- Animation loop state (prevents double RAF loops on history restore) ----
-  let rafId = null;
+  let animation_frame_id = null;
   let running = false;
-  let lastFrameT = 0;
 
-  function startLoop() {
+  function start_loop() {
     if (running) return;
     running = true;
-    lastFrameT = 0;
-    rafId = requestAnimationFrame(step);
+    animation_frame_id = requestAnimationFrame(step);
   }
 
-  window.stopLoop = function () {
+  window.stop_loop = function () {
     running = false;
-    if (rafId !== null) {
-      cancelAnimationFrame(rafId);
-      rafId = null;
+    if (animation_frame_id !== null) {
+      cancelAnimationFrame(animation_frame_id);
+      animation_frame_id = null;
     }
   };
 
@@ -74,7 +72,7 @@ associated gradient vector.
       for (let y = 0; y <= h; y += d) {
         // Obtain random unitary vector
         const angle = Math.random() * 2 * Math.PI;
-        const gradient = new Vector2D(Math.cos(angle), Math.sin(angle));
+        const gradient = new vector_2d(Math.cos(angle), Math.sin(angle));
 
         noise_map.set(`${x},${y}`, gradient);
       }
@@ -90,7 +88,7 @@ Input range = [-1,1]
 t := threshold, usually ~ 0.5
 */
 
-  let center = new Vector2D(w / 2, h / 2);
+  let center = new vector_2d(w / 2, h / 2);
 
   function plot_perlin() {
     points.length = 0; // rebuild points for the current canvas
@@ -98,21 +96,21 @@ t := threshold, usually ~ 0.5
     for (let i = 0; i < w; i += s) {
       for (let j = 0; j < h; j += s) {
         // current point and its lattice cell (multiples of d)
-        const coord = new Vector2D(i, j);
+        const coord = new vector_2d(i, j);
         const x0 = Math.floor(i / d) * d;
         const y0 = Math.floor(j / d) * d;
 
         // access gradients associated to a given point in the grid
-        const top_left = new Vector2D(x0, y0);
-        const top_right = new Vector2D(x0 + d, y0);
-        const bottom_left = new Vector2D(x0, y0 + d);
-        const bottom_right = new Vector2D(x0 + d, y0 + d);
+        const top_left = new vector_2d(x0, y0);
+        const top_right = new vector_2d(x0 + d, y0);
+        const bottom_left = new vector_2d(x0, y0 + d);
+        const bottom_right = new vector_2d(x0 + d, y0 + d);
 
         // string enables keys to be properly compared by the map
-        const top_left_grad = noise_map.get(top_left.toString());
-        const top_right_grad = noise_map.get(top_right.toString());
-        const bottom_left_grad = noise_map.get(bottom_left.toString());
-        const bottom_right_grad = noise_map.get(bottom_right.toString());
+        const top_left_grad = noise_map.get(top_left.to_key());
+        const top_right_grad = noise_map.get(top_right.to_key());
+        const bottom_left_grad = noise_map.get(bottom_left.to_key());
+        const bottom_right_grad = noise_map.get(bottom_right.to_key());
 
         if (
           !top_left_grad ||
@@ -149,27 +147,27 @@ t := threshold, usually ~ 0.5
         const u = fade(sx),
           v = fade(sy);
 
-        const top_interpolation = Lerp(
+        const top_interpolation = lerp(
           u,
           dot_top_left_grad,
           dot_top_right_grad,
         );
-        const bottom_interpolation = Lerp(
+        const bottom_interpolation = lerp(
           u,
           dot_bottom_left_grad,
           dot_bottom_right_grad,
         );
-        const noise = Lerp(v, top_interpolation, bottom_interpolation);
+        const noise = lerp(v, top_interpolation, bottom_interpolation);
 
         // Map Perlin-like value -> probability and sample
         const nn = noise / d; // normalization, approx in [-1, 1]
         const p = logistic_dist(nn, {
-          inputRange: [-1, 1],
+          input_range: [-1, 1],
           threshold: 0.3,
           contrast: 3,
         });
 
-        const to_center = new Vector2D(i / center.x - 1, j / center.y - 1);
+        const to_center = new vector_2d(i / center.x - 1, j / center.y - 1);
         const d_to_center = to_center.mod();
 
         if (Math.random() < p * (1 - d_to_center)) {
@@ -181,38 +179,38 @@ t := threshold, usually ~ 0.5
             vx: 0,
             vy: 0,
             color: `rgba(${Math.floor(255 * (1 - d_to_center))}, 50, ${Math.floor(255 * d_to_center)}, ${0.4 * (1 - d_to_center) + 0.3})`,
-            R: r / (d_to_center + 1),
+            radius: r / (d_to_center + 1),
           });
         }
       }
     }
   }
 
-  function dot_gradient(coord, latticePoint, gradient) {
-    const dx = coord.x - latticePoint.x;
-    const dy = coord.y - latticePoint.y;
+  function dot_gradient(coord, lattice_point, gradient) {
+    const dx = coord.x - lattice_point.x;
+    const dy = coord.y - lattice_point.y;
     return dx * gradient.x + dy * gradient.y;
   }
 
-  function Lerp(t, a, b) {
+  function lerp(t, a, b) {
     return a + t * (b - a);
   }
 
   /*
 Map Perlin noise values to a probability in [0,1].
 Use a logistic (sigmoid) so you can tune density with a threshold and contrast.
-- inputRange: range of your noise values, e.g. [-1, 1] or [0, 1]
+- input_range: range of your noise values, e.g. [-1, 1] or [0, 1]
 - threshold: value in [0,1] at which probability is ~0.5 after normalization
 - contrast: larger -> steeper transition around threshold
 - invert: flip bright/dark regions
 */
   function logistic_dist(
-    noiseValue,
-    { inputRange = [-1, 1], threshold, contrast, invert = false } = {},
+    noise_value,
+    { input_range = [-1, 1], threshold, contrast, invert = false } = {},
   ) {
     // normalize to [0,1]
-    const [a, b] = inputRange;
-    let v = (noiseValue - a) / (b - a);
+    const [a, b] = input_range;
+    let v = (noise_value - a) / (b - a);
     // clamp
     v = Math.max(0, Math.min(1, v));
     if (invert) v = 1 - v;
@@ -225,19 +223,14 @@ Use a logistic (sigmoid) so you can tune density with a threshold and contrast.
   let primary_rgba = "";
 
   // Physics
-  function step(t) {
+  function step() {
     if (!running) return;
-
-    if (!lastFrameT) lastFrameT = t;
-    // Clamp large gaps (e.g., when returning from another page) to avoid visible jumps
-    const dt = Math.min(t - lastFrameT, 34);
-    lastFrameT = t;
 
     ctx.fillStyle = primary_rgba;
     ctx.fillRect(0, 0, w, h);
 
-    const R = 200; // radius of influence
-    const G = 0.5; // gravity strength
+    const influence_radius = 200;
+    const gravity_strength = 0.5;
     const damping = 0.9; // friction
     const spring = 0.001; // return-to-origin strength (0.001)
 
@@ -256,8 +249,8 @@ Use a logistic (sigmoid) so you can tune density with a threshold and contrast.
 
     // Mouse is in screen (post-transform) coordinates. Convert to world coordinates
     // so forces line up with the scaled drawing.
-    const mouseWorldX = center.x + (mouse.x - center.x) / scale;
-    const mouseWorldY = center.y + (mouse.y - center.y) / scale;
+    const mouse_world_x = center.x + (mouse.x - center.x) / scale;
+    const mouse_world_y = center.y + (mouse.y - center.y) / scale;
 
     for (const p of points) {
       // devuelve al origen del punto, v es un vector
@@ -266,14 +259,14 @@ Use a logistic (sigmoid) so you can tune density with a threshold and contrast.
 
       // cursor gravity within radius (only while mouse is pressed)
       if (mouse.down) {
-        const dx = mouseWorldX - p.x;
-        const dy = mouseWorldY - p.y;
+        const dx = mouse_world_x - p.x;
+        const dy = mouse_world_y - p.y;
         const dist2 = dx * dx + dy * dy;
 
-        if (dist2 < R * R) {
-          const dist = Math.sqrt(dist2) + eps; // eps avoids division by 0
-          const t = 1 - dist / R; // 1 near cursor, 0 at boundary
-          const strength = G * t * t; // smooth falloff
+        if (dist2 < influence_radius * influence_radius) {
+          const dist = Math.sqrt(dist2) + EPSILON;
+          const force_ratio = 1 - dist / influence_radius;
+          const strength = gravity_strength * force_ratio * force_ratio;
           p.vx += (dx / dist) * strength;
           p.vy += (dy / dist) * strength;
         }
@@ -286,20 +279,17 @@ Use a logistic (sigmoid) so you can tune density with a threshold and contrast.
 
       // draw
       ctx.beginPath();
-      ctx.arc(p.x, p.y, p.R, 0, Math.PI * 2);
+      ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
       ctx.fillStyle = p.color;
       ctx.fill();
     }
 
     ctx.restore();
-    const scrollFactor = scrollY * 0.002;
-    // (scrollFactor is currently unused, keep it if you plan to drive the field with scroll)
-
-    rafId = requestAnimationFrame(step);
+    animation_frame_id = requestAnimationFrame(step);
   }
 
   // TODO: understand all this
-  function resizeCanvasToDisplaySize() {
+  function resize_canvas_to_display_size() {
     const dpr = window.devicePixelRatio || 1;
     const rect = canvas.getBoundingClientRect();
 
@@ -314,7 +304,7 @@ Use a logistic (sigmoid) so you can tune density with a threshold and contrast.
     // Draw using CSS pixel coordinates
     ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
 
-    center = new Vector2D(w / 2, h / 2);
+    center = new vector_2d(w / 2, h / 2);
     d = Math.floor(w / n);
   }
 
@@ -333,28 +323,28 @@ Use a logistic (sigmoid) so you can tune density with a threshold and contrast.
     // Guard against double init (htmx history restore / pageshow)
     if (canvas.dataset.perlinInit === "1") {
       // Still ensure correct sizing + running loop
-      resizeCanvasToDisplaySize();
-      startLoop();
+      resize_canvas_to_display_size();
+      start_loop();
       return;
     }
     canvas.dataset.perlinInit = "1";
     ctx = canvas.getContext("2d");
-    resizeCanvasToDisplaySize();
+    resize_canvas_to_display_size();
 
     // Cursor tracking for interactive gravity
-    function updateMousePos(e) {
+    function update_mouse_position(event) {
       // mouse position reltive to canvas
       const rect = canvas.getBoundingClientRect();
-      mouse.x = e.clientX - rect.left;
-      mouse.y = e.clientY - rect.top;
+      mouse.x = event.clientX - rect.left;
+      mouse.y = event.clientY - rect.top;
     }
 
-    canvas.addEventListener("mousemove", (e) => {
-      updateMousePos(e);
+    canvas.addEventListener("mousemove", (event) => {
+      update_mouse_position(event);
     });
 
-    canvas.addEventListener("mousedown", (e) => {
-      updateMousePos(e);
+    canvas.addEventListener("mousedown", (event) => {
+      update_mouse_position(event);
       mouse.down = true;
     });
 
@@ -377,49 +367,49 @@ Use a logistic (sigmoid) so you can tune density with a threshold and contrast.
 
     // Build the point field once, then animate it
     plot_perlin();
-    startLoop();
+    start_loop();
   };
 
   // Keep canvas crisp if the viewport changes
   window.resizing = function () {
     if (!canvas || !ctx) return;
-    resizeCanvasToDisplaySize();
+    resize_canvas_to_display_size();
     build_noise_map();
     plot_perlin();
   };
 
+  window.addEventListener("resize", () => {
+    if (window.location.pathname === "/") {
+      window.resizing();
+    }
+  });
+
   // Initial load
   window.addEventListener("DOMContentLoaded", () => {
-    init_perlin();
+    window.init_perlin();
   });
 
   // Stop rendering when navigating away (prevents duplicate loops)
-  window.addEventListener("pagehide", stopLoop);
+  window.addEventListener("pagehide", window.stop_loop);
 
   // htmx lifecycle (swap away / restore)
   document.body.addEventListener("htmx:beforeSwap", () => {
-    stopLoop();
-    const c = document.getElementById("perlinCanvas");
-    if (c) c.dataset.perlinInit = "";
+    window.stop_loop();
+    const canvas_element = document.getElementById("perlinCanvas");
+    if (canvas_element) canvas_element.dataset.perlinInit = "";
   });
 
   document.body.addEventListener("htmx:historyRestore", () => {
-    const c = document.getElementById("perlinCanvas");
-    if (c) c.dataset.perlinInit = "";
-    init_perlin();
-  });
-
-  document.body.addEventListener("htmx:beforeSwap", () => {
-    stopLoop();
-    const c = document.getElementById("perlinCanvas");
-    if (c) c.dataset.perlinInit = "";
+    const canvas_element = document.getElementById("perlinCanvas");
+    if (canvas_element) canvas_element.dataset.perlinInit = "";
+    window.init_perlin();
   });
 
   // afterSettle provides time for the browser to compute final layout
   document.body.addEventListener("htmx:afterSettle", () => {
-    const c = document.getElementById("perlinCanvas");
-    if (!c) return;
-    c.dataset.perlinInit = ""; // force init path
-    init_perlin();
+    const canvas_element = document.getElementById("perlinCanvas");
+    if (!canvas_element) return;
+    canvas_element.dataset.perlinInit = ""; // force init path
+    window.init_perlin();
   });
 }

@@ -57,27 +57,27 @@ func projects(projects_list []Project) templ.Component {
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
-				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 5, "\" hx-target=\"#main\" hx-swap=\"innerHTML swap:100ms settle:100ms\" hx-push-url=\"true\" class=\"w-full max-h-[500px] flex flex-col p-4 aspect-square bg-[var(--logo)]/10 rounded-[25px] cursor-pointer\"><div id=\"bento-header\"><div id=\"bento-title\">")
+				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 5, "\" hx-target=\"#main\" hx-swap=\"innerHTML swap:100ms settle:100ms\" hx-push-url=\"true\" class=\"w-full max-h-[500px] flex flex-col p-4 aspect-square bg-[var(--logo)]/10 rounded-[25px] no-underline hover:no-underline transition-colors duration-150 ease-in hover:bg-[var(--logo)]/16 cursor-pointer bento-card\"><div class=\"bento-header\"><div class=\"bento-title\">")
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
 				var templ_7745c5c3_Var3 string
 				templ_7745c5c3_Var3, templ_7745c5c3_Err = templ.JoinStringErrs(project.Title)
 				if templ_7745c5c3_Err != nil {
-					return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/projects/templates.templ`, Line: 24, Col: 45}
+					return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/projects/templates.templ`, Line: 25, Col: 48}
 				}
 				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var3))
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
-				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 6, "</div><div id=\"bento-date\">")
+				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 6, "</div><div class=\"bento-date\">")
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
 				var templ_7745c5c3_Var4 string
 				templ_7745c5c3_Var4, templ_7745c5c3_Err = templ.JoinStringErrs(project.Date)
 				if templ_7745c5c3_Err != nil {
-					return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/projects/templates.templ`, Line: 25, Col: 43}
+					return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/projects/templates.templ`, Line: 26, Col: 46}
 				}
 				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var4))
 				if templ_7745c5c3_Err != nil {

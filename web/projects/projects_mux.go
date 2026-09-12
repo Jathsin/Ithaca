@@ -27,17 +27,14 @@ func Get_mux() (*http.ServeMux, error) {
 	mux.HandleFunc("GET /{slug}/static/{file...}", func(w http.ResponseWriter, r *http.Request) {
 		slug := r.PathValue("slug")
 		file := r.PathValue("file")
-
-		http.ServeFile(w, r, filepath.Join("projects", slug, "static", file))
+		serve_project_file(w, r, filepath.Join(slug, "static", file))
 	})
 
 	mux.HandleFunc("GET /{name}/{file...}", func(w http.ResponseWriter, r *http.Request) {
 		name := r.PathValue("name")
 		file := r.PathValue("file")
 
-		// validate name like you already do
-		// then:
-		http.ServeFile(w, r, filepath.Join("projects", name, file))
+		serve_project_file(w, r, filepath.Join(name, file))
 	})
 	return mux, nil
 }
@@ -58,29 +55,38 @@ var seo_projects = types.SEO{
 
 // "GET /"
 func projects_handler(w http.ResponseWriter, r *http.Request) {
+	log := r.Context().Value(types.Ctx_key_logger{}).(*slog.Logger)
 
 	// Get project list
-	entries, _ := os.ReadDir("posts/projects")
+	entries, err := os.ReadDir("posts/projects")
+	if err != nil {
+		log.Error("projects_handler: failed to read projects directory", "err", err)
+		http.Error(w, "Internal Server Error", http.StatusInternalServerError)
+		return
+	}
 	var projects_list []Project
 
-	for _, e := range entries {
-		if e.IsDir() || filepath.Ext(e.Name()) != ".md" {
+	for _, entry := range entries {
+		if entry.IsDir() || filepath.Ext(entry.Name()) != ".md" {
 			continue
 		}
 
-		filename := filepath.Join("posts", "projects", e.Name())
+		filename := filepath.Join("posts", "projects", entry.Name())
 		info, err := os.Stat(filename)
 		if err != nil {
+			log.Error("projects_handler: failed to inspect project", "file", filename, "err", err)
 			continue
 		}
 
 		content, err := os.ReadFile(filename)
 		if err != nil {
+			log.Error("projects_handler: failed to read project", "file", filename, "err", err)
 			continue
 		}
 
 		title, slug, err := parse_project_front_matter(content)
 		if err != nil {
+			log.Error("projects_handler: invalid project front matter", "file", filename, "err", err)
 			continue
 		}
 
@@ -108,6 +114,7 @@ func show_project_handler(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		http.Error(w, "Internal Server Error", http.StatusInternalServerError)
 		log.Error("show_project_handler: error in posts.Get_md_from_slug(slug, \"projects\")", "err", err)
+		return
 	}
 
 	if utils.IsHTMX(r) {
@@ -115,6 +122,33 @@ func show_project_handler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	templ.Handler(ui.Layout(nil, ui.Nav_bar(), project(content), seo.SEO)).ServeHTTP(w, r)
+}
+
+func serve_project_file(w http.ResponseWriter, r *http.Request, relative_path string) {
+	log := r.Context().Value(types.Ctx_key_logger{}).(*slog.Logger)
+	if !filepath.IsLocal(relative_path) {
+		log.Warn("serve_project_file: rejected invalid path", "path", relative_path)
+		http.Error(w, "Bad Request", http.StatusBadRequest)
+		return
+	}
+
+	project_path := filepath.Join("projects", relative_path)
+	file_info, err := os.Stat(project_path)
+	if err != nil {
+		if os.IsNotExist(err) {
+			http.NotFound(w, r)
+			return
+		}
+		log.Error("serve_project_file: failed to inspect file", "path", project_path, "err", err)
+		http.Error(w, "Internal Server Error", http.StatusInternalServerError)
+		return
+	}
+	if file_info.IsDir() {
+		http.NotFound(w, r)
+		return
+	}
+
+	http.ServeFile(w, r, project_path)
 }
 
 func parse_project_front_matter(content []byte) (string, string, error) {

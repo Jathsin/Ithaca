@@ -15,14 +15,15 @@ templ projects(projects_list []Project) {
 							hx-target="#main"
 							hx-swap="innerHTML swap:100ms settle:100ms"
 							hx-push-url="true"
-							class=" w-full max-h-[500px] 
-							flex flex-col p-4
-							aspect-square bg-[var(--logo)]/10 rounded-[25px]
-							cursor-pointer"
+							class="w-full max-h-[500px]
+								flex flex-col p-4
+								aspect-square bg-[var(--logo)]/10 rounded-[25px]
+								no-underline hover:no-underline
+								transition-colors duration-150 ease-in hover:bg-[var(--logo)]/16 cursor-pointer bento-card"
 						>
-							<div id="bento-header">
-								<div id="bento-title">{ project.Title }</div>
-								<div id="bento-date">{ project.Date }</div>
+							<div class="bento-header">
+								<div class="bento-title">{ project.Title }</div>
+								<div class="bento-date">{ project.Date }</div>
 							</div>
 						</a>
 					}

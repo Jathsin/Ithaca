@@ -18,8 +18,8 @@ if (!window.__components_loaded__) {
   </svg>
   `;
 
-  document.addEventListener("click", async (e) => {
-    const button = e.target.closest(".copy-btn");
+  document.addEventListener("click", async (event) => {
+    const button = event.target.closest(".copy-btn");
     if (!button) return;
     const wrapper = button.closest(".code-block");
     const code = wrapper?.querySelector("pre code");
@@ -34,55 +34,27 @@ if (!window.__components_loaded__) {
     }
   });
 
-  window.addEventListener("resize", () => {
-    if (window.location.pathname === "/") {
-      window.resizing?.();
-    }
-  });
-
-  document.body.addEventListener("htmx:beforeSwap", () => {
-    window.stopLoop?.();
-  });
-
   document.body.addEventListener("htmx:afterSettle", () => {
     render_katex(document.body);
-    if (window.location.pathname === "/") {
-      window.init_perlin?.();
-    }
   });
 
-  window.addEventListener("pageshow", () => {
+  window.addEventListener("pageshow", (event) => {
     render_katex(document.body);
-    if (window.location.pathname === "/") {
-      window.init_perlin?.();
+    if (event.persisted) {
+      console.log("pageshow: restored from bfcache");
     }
-  });
-
-  window.addEventListener("resize", () => {
-    window.resize_perlin?.(); // optional if you expose it
-  });
-
-  window.addEventListener("scroll", () => {
-    window.update_scroll?.(); // optional
   });
 
   // Accordion
-  document.addEventListener("click", onAccordionClick);
-
-  // If the page is restored from the browser's back/forward cache (bfcache),
-  // scripts don't re-run, but delegated listeners remain. This is here mainly
-  // for debugging visibility.
-  window.addEventListener("pageshow", (e) => {
-    if (e.persisted) console.log("pageshow: restored from bfcache");
-  });
+  document.addEventListener("click", on_accordion_click);
 
   render_katex(document.body);
 }
 
 // Use event delegation so the accordion keeps working across HTMX swaps
 // and also when the browser restores the page from the back/forward cache.
-function onAccordionClick(e) {
-  const accordion = e.target.closest(".accordion");
+function on_accordion_click(event) {
+  const accordion = event.target.closest(".accordion");
   if (!accordion) return;
 
   const parent = accordion.parentElement;
@@ -91,9 +63,9 @@ function onAccordionClick(e) {
 
   if (!panel) return;
 
-  const isOpen = !!panel.style.maxHeight;
+  const is_open = !!panel.style.maxHeight;
 
-  if (isOpen) {
+  if (is_open) {
     panel.style.maxHeight = "";
     if (icon) icon.style.transform = "rotate(0deg)";
   } else {
@@ -125,13 +97,3 @@ function render_katex(root_element) {
     console.error("Failed to render KaTeX:", error);
   }
 }
-
-// Attach once
-document.addEventListener("click", window.onAccordionClick);
-
-// If the page is restored from the browser's back/forward cache (bfcache),
-// scripts don't re-run, but delegated listeners remain. This is here mainly
-// for debugging visibility.
-window.addEventListener("pageshow", (e) => {
-  if (e.persisted) console.log("pageshow: restored from bfcache");
-});

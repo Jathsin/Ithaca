@@ -221,7 +221,7 @@ section a:hover {
    ============================== */
 
 /* Apply these classes inside each bento card */
-#bento-title {
+.bento-title {
   font-family: var(--h_font);
   font-size: 1.45rem;
   line-height: 1;
@@ -236,7 +236,7 @@ section a:hover {
   margin-right: var(--margin-s);
 }
 
-#bento-date {
+.bento-date {
   font-size: 0.82rem;
   line-height: 1.2;
   color: rgba(32, 35, 115, 0.82);
@@ -249,9 +249,13 @@ section a:hover {
 }
 
 /* Optional: if you wrap title+date in a header area */
-#bento-header {
+.bento-header {
   padding-top: var(--margin-xs);
   padding-bottom: var(--margin-xs);
+}
+
+.bento-card:hover {
+  text-decoration: none;
 }
 
 /* Components */
