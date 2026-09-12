@@ -36,10 +36,12 @@ if (!window.__components_loaded__) {
 
   document.body.addEventListener("htmx:afterSettle", () => {
     render_katex(document.body);
+    build_table_of_contents();
   });
 
   window.addEventListener("pageshow", (event) => {
     render_katex(document.body);
+    build_table_of_contents();
     if (event.persisted) {
       console.log("pageshow: restored from bfcache");
     }
@@ -49,6 +51,7 @@ if (!window.__components_loaded__) {
   document.addEventListener("click", on_accordion_click);
 
   render_katex(document.body);
+  build_table_of_contents();
 }
 
 // Use event delegation so the accordion keeps working across HTMX swaps
@@ -95,5 +98,126 @@ function render_katex(root_element) {
     });
   } catch (error) {
     console.error("Failed to render KaTeX:", error);
+  }
+}
+
+function build_table_of_contents() {
+  if (window.table_of_contents_scroll_handler) {
+    window.removeEventListener(
+      "scroll",
+      window.table_of_contents_scroll_handler,
+    );
+  }
+  document.querySelector(".table-of-contents")?.remove();
+
+  const supports_table_of_contents =
+    window.location.pathname.startsWith("/projects/") ||
+    window.location.pathname.startsWith("/articles/");
+  if (!supports_table_of_contents) {
+    return;
+  }
+
+  const content = document.querySelector(".project-content");
+  if (!content) {
+    return;
+  }
+
+  const headings = [...content.querySelectorAll("h2, h3")];
+  if (headings.length === 0) {
+    return;
+  }
+
+  const table_of_contents = document.createElement("nav");
+  table_of_contents.className = "table-of-contents";
+  table_of_contents.setAttribute("aria-label", "Table of contents");
+
+  const title = document.createElement("div");
+  title.className = "table-of-contents-title";
+  title.textContent = "Table of contents";
+  table_of_contents.append(title);
+
+  const list = document.createElement("ol");
+  list.className = "table-of-contents-list";
+
+  for (const heading of headings) {
+    const item = document.createElement("li");
+    item.className = `table-of-contents-item table-of-contents-${heading.tagName.toLowerCase()}`;
+
+    const link = document.createElement("a");
+    link.href = `#${heading.id}`;
+    link.textContent = heading.textContent.trim();
+    link.dataset.heading_id = heading.id;
+
+    item.append(link);
+    list.append(item);
+  }
+
+  table_of_contents.append(list);
+  content.append(table_of_contents);
+
+  table_of_contents.addEventListener("click", (event) => {
+    const link = event.target.closest("a");
+    if (!link) {
+      return;
+    }
+
+    const heading = document.getElementById(link.dataset.heading_id);
+    if (!heading) {
+      return;
+    }
+
+    event.preventDefault();
+    heading.scrollIntoView({ behavior: "smooth", block: "start" });
+    history.replaceState(null, "", link.href);
+    set_active_table_of_contents_link(table_of_contents, heading.id);
+  });
+
+  let scroll_frame_id = null;
+  window.table_of_contents_scroll_handler = () => {
+    if (scroll_frame_id !== null) {
+      return;
+    }
+
+    scroll_frame_id = requestAnimationFrame(() => {
+      const reached_page_end =
+        window.innerHeight + window.scrollY >=
+        document.documentElement.scrollHeight - 2;
+      let active_heading = headings[0];
+
+      if (reached_page_end) {
+        active_heading = headings.at(-1);
+      } else {
+        for (const heading of headings) {
+          if (heading.getBoundingClientRect().top > window.innerHeight * 0.25) {
+            break;
+          }
+          active_heading = heading;
+        }
+      }
+
+      set_active_table_of_contents_link(
+        table_of_contents,
+        active_heading.id,
+      );
+      scroll_frame_id = null;
+    });
+  };
+
+  window.addEventListener("scroll", window.table_of_contents_scroll_handler, {
+    passive: true,
+  });
+  window.table_of_contents_scroll_handler();
+}
+
+function set_active_table_of_contents_link(table_of_contents, heading_id) {
+  for (const link of table_of_contents.querySelectorAll("a")) {
+    const is_active = link.dataset.heading_id === heading_id;
+    link.classList.toggle("is-active", is_active);
+
+    if (is_active) {
+      link.setAttribute("aria-current", "location");
+    } else {
+      link.removeAttribute("aria-current");
+    }
   }
 }

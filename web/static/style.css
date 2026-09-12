@@ -216,6 +216,80 @@ section a:hover {
   }
 }
 
+.project-content h2,
+.project-content h3 {
+  scroll-margin-top: 6rem;
+}
+
+/* Table of contents for long-form projects and articles */
+.table-of-contents {
+  display: none;
+}
+
+@media (min-width: 1280px) {
+  .table-of-contents {
+    position: fixed;
+    top: 7.5rem;
+    left: calc(50% + 410px);
+    z-index: 20;
+
+    display: block;
+    width: min(220px, calc(50vw - 430px));
+    max-height: calc(100vh - 11rem);
+    overflow-y: auto;
+  }
+
+  .table-of-contents-title {
+    margin-bottom: var(--margin-xs);
+
+    font-family: var(--h_font);
+    font-size: 1.2rem;
+    line-height: 1;
+    color: rgba(32, 35, 115, 0.72);
+  }
+
+  .table-of-contents-list {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .table-of-contents-item {
+    margin: 0;
+  }
+
+  .table-of-contents-item a {
+    display: block;
+    padding: 0.3rem 0.75rem;
+    border-left: 1px solid rgba(175, 152, 113, 0.45);
+
+    font-family: var(--p_font);
+    font-size: 0.76rem;
+    line-height: 1.35;
+    color: rgba(101, 65, 7, 0.62);
+    text-decoration: none;
+
+    transition:
+      border-color 120ms ease,
+      color 120ms ease;
+  }
+
+  .table-of-contents-h3 a {
+    padding-left: 1.4rem;
+    font-size: 0.71rem;
+  }
+
+  .table-of-contents-item a:hover {
+    color: rgba(32, 35, 115, 0.82);
+    text-decoration: none;
+  }
+
+  .table-of-contents-item a.is-active {
+    border-left: 2px solid rgba(32, 35, 115, 0.82);
+    color: rgba(32, 35, 115, 0.88);
+  }
+}
+
 /* ==============================
    Bento boxes: title + date
    ============================== */
